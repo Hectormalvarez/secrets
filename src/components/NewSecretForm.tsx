@@ -1,16 +1,28 @@
 import React, { BaseSyntheticEvent, useState } from "react";
 
+//import CryptoJS from "crypto-js";
+
+// code to encrypt text
+//CryptoJS.AES.encrypt(
+//   e.target[0].value,
+//   process.env.REACT_APP_SECRET_KEY as string
+// ).toString()
+
+// code to decrypt
+// CryptoJS.AES.decrypt(
+//   e.target[0].value,
+//   process.env.REACT_APP_KEY as string
+// ).toString(CryptoJS.enc.Utf8);
 
 const NewSecretForm = () => {
   const [newSecretText, setNewSecretText] = useState("");
 
   const handleNewSecretChange = (e: BaseSyntheticEvent) => {
-          setNewSecretText(e.target.value);
-  }
+    setNewSecretText(e.target.value);
+  };
 
   const handleNewSecretSubmit = (e: BaseSyntheticEvent) => {
     e.preventDefault();
-    console.log(e.target[0].value);
     setNewSecretText("");
   };
 
