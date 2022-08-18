@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 
-import Layout from "./components/Layout";
-import NewSecretForm from "./components/NewSecretForm";
+import Layout from "./components/Layout/Layout";
+import NewSecretForm from "./pages/NewSecretForm";
 
 function App() {
   return (
