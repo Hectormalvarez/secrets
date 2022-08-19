@@ -36,6 +36,7 @@ const NewSecretForm = () => {
         className="mb-6 h-2/3 rounded-lg border-4 border-slate-800 bg-slate-200 p-2  sm:h-3/4"
         value={newSecretText}
         onChange={handleNewSecretChange}
+        placeholder="Enter New Secret Here"
       />
       <button
         type="submit"
