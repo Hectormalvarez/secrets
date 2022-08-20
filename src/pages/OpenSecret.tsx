@@ -1,8 +1,11 @@
 import React from 'react'
 
-const OpenSecret = () => {
+const OpenSecret = (props: any) => {
   return (
-    <div>OpenSecret</div>
+    <section>
+      <h2 className='text-5xl text-center'>View a One Time Secret!</h2>
+      <textarea className='mx-auto' />
+    </section>
   )
 }
 

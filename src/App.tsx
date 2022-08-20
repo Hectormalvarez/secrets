@@ -1,10 +1,9 @@
 import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 
-import Layout from "./components/Layout/Layout";
-import NewSecretForm from "./pages/NewSecretForm";
+import Layout from "./components/layout/Layout";
+import NewSecretForm from "./pages/NewSecret";
 import OpenSecret from "./pages/OpenSecret";
-import SecretCreated from "./pages/SecretCreated";
 
 function App() {
   return (
@@ -12,7 +11,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to={"/new-secret"} replace />} />
         <Route path="/new-secret" element={<NewSecretForm />} />
-        <Route path="/secret-created/:secretID" element={<SecretCreated />} />
         <Route path="/open-secret/:secretID" element={<OpenSecret />} />
         <Route path="*" element={<Navigate to={"/new-secret"} replace />} />
       </Routes>
