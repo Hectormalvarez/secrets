@@ -41,7 +41,7 @@ const NewSecretForm = () => {
           Enter a New Secret
         </label>
         <textarea
-          className="mb-6 h-2/3 rounded-lg border-4 border-slate-800 bg-slate-100 p-4 text-lg md:h-3/4  md:text-2xl"
+          className="mb-6 h-2/3 rounded-lg border-4 border-slate-800 bg-slate-100 p-2 text-sm tracking-tighter md:h-3/4  md:text-2xl"
           placeholder="Private information you want to share goes here"
           ref={secretTextAreaRef}
           required

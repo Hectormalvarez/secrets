@@ -1,37 +1,50 @@
-import { Fragment, useState, useRef } from "react";
+import { Fragment, BaseSyntheticEvent } from "react";
 
 import useCopy from "use-copy";
+import { ToastContainer, Slide, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { Dialog, Transition } from "@headlessui/react";
 import { ClipboardCheckIcon, DocumentAddIcon } from "@heroicons/react/outline";
 
 export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
   const [copied, copy, setCopied] = useCopy(
-    `https://secrets.taylormadetech.net/${secretID}`
+    `https://secrets.taylormadetech.net/open-secret/${secretID}`
   );
-  const [copiedOnce, setCopiedOnce] = useState(false);
-  const [clickedOutsideModal, setClickedOutsideModal] = useState(false);
-  const secretLinkRef = useRef(null);
 
   const handleCopyToClipboardClick = () => {
     copySecretLink();
   };
 
+  const closeModal = () => {
+    if (copied) {
+      setCopied(false);
+      setIsOpen(false);
+    } else {
+      handleClickOutsideModal();
+    }
+  };
+
   const copySecretLink = () => {
     copy();
-    setCopiedOnce(true);
+    setCopied(true);
+    toast.dismiss();
+    toast.success("Secret Link Copied!", {
+      position: toast.POSITION.TOP_LEFT,
+      toastId: "copied-success",
+    });
+  };
 
-    setTimeout(() => {
-      setCopied(false);
-    }, 3000);
+  const handleSecretLinkClick = (e: BaseSyntheticEvent) => {
+    e.target.select();
+    copySecretLink();
   };
 
   const handleClickOutsideModal = () => {
-    setClickedOutsideModal(true);
-
-    setTimeout(() => {
-      setClickedOutsideModal(false);
-    }, 3000);
+    toast.warn("copy to clipboard to be able to create a new secret!", {
+      position: toast.POSITION.TOP_LEFT,
+      toastId: "havent-copied-link-warning",
+    });
   };
 
   return (
@@ -39,7 +52,7 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
       <Dialog
         as="div"
         className="relative z-10"
-        onClose={handleClickOutsideModal}
+        onClose={!copied ? handleClickOutsideModal : closeModal}
       >
         <Transition.Child
           as={Fragment}
@@ -58,6 +71,7 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center md:items-center md:p-0">
+            <ToastContainer transition={Slide} />
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-500"
@@ -68,17 +82,6 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
               leaveTo="opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
             >
               <Dialog.Panel className="relative overflow-hidden rounded-md transition-all md:my-8 md:w-full md:max-w-lg">
-                {copied && <p>Copied!</p>}
-                {clickedOutsideModal && !copiedOnce ? (
-                  <p>copy to clipboard to be able to create a new secret!</p>
-                ) : (
-                  ""
-                )}
-                {clickedOutsideModal && copiedOnce ? (
-                  <p>click create new secret to create a new secret!</p>
-                ) : (
-                  ""
-                )}
                 <div className="bg-slate-100 px-4 pt-5 pb-4 md:p-6 md:pb-4">
                   <div className="md:flex md:items-start ">
                     <div className="mt-3 text-center md:mt-0 md:ml-4 md:flex-grow md:text-left">
@@ -88,16 +91,16 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
                       >
                         New Secret Created!
                       </Dialog.Title>
-                      <div className="mt-2 text-xl">
+                      <div className="mt-2 md:text-xl">
                         share your one time secret with this link!
                       </div>
                       <input
                         type="text"
                         name="new-secret-link"
                         id="new-secret-link"
-                        className="mt-2 w-full overflow-y-auto rounded-lg bg-slate-800 p-2 text-2xl text-slate-200 "
-                        value={`https://secrets.taylormadetech.net/${secretID}`}
-                        ref={secretLinkRef}
+                        className="mt-2 w-full overflow-y-auto rounded-lg bg-slate-800 p-2 text-sm text-slate-200 "
+                        value={`https://secrets.taylormadetech.net/open-secret/${secretID}`}
+                        onClick={handleSecretLinkClick}
                         readOnly
                       />
                     </div>
@@ -120,20 +123,12 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
                       mt-3 flex w-full items-center justify-center rounded-md border px-4 py-2 text-base
                      md:mt-0 md:ml-3 md:w-auto 
                      ${
-                       copiedOnce
+                       copied
                          ? "border-gray-100 bg-gray-200 text-gray-700 md:cursor-pointer md:hover:bg-slate-300 md:hover:text-slate-900"
                          : "border-gray-300 bg-gray-400 text-gray-500 md:cursor-not-allowed"
                      }
                     `}
-                    onClick={() => {
-                      if (copiedOnce) {
-                        setCopiedOnce(false);
-                        setIsOpen(false);
-                      }
-                      else {
-                        handleClickOutsideModal()
-                      }
-                    }}
+                    onClick={closeModal}
                   >
                     <p className="grow">New Secret!</p>
                     <DocumentAddIcon className="h-8 w-8" />
