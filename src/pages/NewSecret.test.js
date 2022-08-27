@@ -1,30 +1,12 @@
-import { screen, render } from "@testing-library/react";
-import user from "@testing-library/user-event";
+import { render } from "@testing-library/react";
 import NewSecret from "./NewSecret";
 
-describe("<NewSecret />", () => {
-  it("loads up correctly", () => {
-    render(<NewSecret />);
-    expect(screen.getByText("Enter a New Secret")).toBeInTheDocument();
-    expect(screen.getByText("Create New Secret")).toBeInTheDocument();
-  });
+jest.mock("nanoid", () => {
+  return { nanoid: () => "1234" };
+});
 
-  test("able to enter text", () => {
+describe("<NewSecret /> smoke test", () => {
+  it("renders without crashing", () => {
     render(<NewSecret />);
-    const newSecretTextArea = screen.getByPlaceholderText(
-      "Enter New Secret Here"
-    );
-    user.type(newSecretTextArea, "This is a new secret");
-  });
-
-  test("new secret modal opens with successful submit", () => {
-    render(<NewSecret />);
-    const newSecretTextArea = screen.getByPlaceholderText(
-      "Enter New Secret Here"
-    );
-    user.type(newSecretTextArea, "This is a new secret");
-    user.click(screen.getByText("Create New Secret"));
-    expect(screen.getByText("New Secret Created!")).toBeInTheDocument();
-    screen.debug()
   });
 });

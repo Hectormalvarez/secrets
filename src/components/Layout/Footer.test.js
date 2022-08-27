@@ -3,11 +3,9 @@ import { render, screen } from '@testing-library/react'
 
 import Footer from './Footer'
 
-describe('<Footer />', () => {
-  it("loads up correctly", () => {
+describe('<Footer /> smoke test', () => {
+  it("renders without error", () => {
     render(<Footer />)
-    expect(screen.getByText("by Taylor Made Technology Network")).toBeInTheDocument()
-    expect(screen.getByText("by Taylor Made Technology Network")).toBeInTheDocument()
 
   });
 });
