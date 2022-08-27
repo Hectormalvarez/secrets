@@ -122,14 +122,18 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
                      ${
                        copiedOnce
                          ? "border-gray-100 bg-gray-200 text-gray-700 md:cursor-pointer md:hover:bg-slate-300 md:hover:text-slate-900"
-                         : "border-gray-300 bg-gray-400 text-gray-500"
+                         : "border-gray-300 bg-gray-400 text-gray-500 md:cursor-not-allowed"
                      }
                     `}
                     onClick={() => {
-                      setCopiedOnce(false);
-                      setIsOpen(false);
+                      if (copiedOnce) {
+                        setCopiedOnce(false);
+                        setIsOpen(false);
+                      }
+                      else {
+                        handleClickOutsideModal()
+                      }
                     }}
-                    disabled={!copiedOnce ? true : false}
                   >
                     <p className="grow">New Secret!</p>
                     <DocumentAddIcon className="h-8 w-8" />
