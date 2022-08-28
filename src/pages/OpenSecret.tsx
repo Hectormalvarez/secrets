@@ -1,20 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
-
-import useCopy from "use-copy";
 import { useParams } from "react-router-dom";
-
 import { ToastContainer, Slide, toast } from "react-toastify";
-
-import { encryptText, decryptText } from "../utils";
+import { decryptText } from "../utils";
+import { API, graphqlOperation } from 'aws-amplify'
+import { getSecret } from "../graphql/queries";
+import { deleteSecret } from "../graphql/mutations";
+import useCopy from "use-copy";
 
 const OpenSecret = () => {
   const [secret, setSecret] = useState("");
+  const [decryptedSecret, setDecryptedSecret] = useState("")
   const secretTextRef = useRef<HTMLTextAreaElement>(null);
-  const [copied, copy, setCopied] = useCopy(secret);
+  const [copied, copy, setCopied] = useCopy(decryptedSecret);
 
   const { secretID } = useParams();
 
   const handleSecretClick = () => {
+    if (secret === "Unable to Download Secret") return;
     if (copied) {
       copy();
       setCopied(true);
@@ -30,24 +32,45 @@ const OpenSecret = () => {
   };
 
   const handleOpenSecret = () => {
+    if (secret === "Unable to Download Secret") return;
     copy();
-    setSecret(decryptText(secret as string, "password"));
+    setCopied(true);
+    const decryptedText = decryptText(secret as string, "password")
+    setDecryptedSecret(decryptedText);
     toast.dismiss();
     toast.success("Secret Opened and Copied to Clipboard!", {
       toastId: "opened-success",
     });
     secretTextRef.current?.select();
+    destroySecret(secretID as string)
   };
 
-  useEffect(() => {
-    const encryptSecretID = encryptText(secretID as string, "password");
-    setSecret(encryptSecretID);
-  }, [secretID]);
+  const downloadSecret = async (secretID: string) => {
+    try {
+      const secretData: any = await API.graphql(graphqlOperation(getSecret, { id: secretID }))
+      const secretText = secretData.data.getSecret.secretText
+      setSecret(secretText)
+    } catch (error) {
+      setSecret("Unable to Download Secret")
+      toast.error("Unable to Download Secret")
+    }
+  }
 
-  // use effect to select secret text once opened
+  const destroySecret = async (secretID: string) => {
+    try {
+      await API.graphql(graphqlOperation(deleteSecret, {input: {id: secretID}}))
+    } catch (error) {
+      toast.error("Unable to destroy secret!", {
+        autoClose: 3000
+      })
+    }
+  }
+
   useEffect(() => {
-    if (copied) secretTextRef.current?.select();
-  }, [secret, copied]);
+    if (secretID) {
+      downloadSecret(secretID)
+    }
+  }, [secretID]);
 
   return (
     <section className="m-2 flex h-full flex-col justify-center md:mx-auto md:max-w-3xl md:px-8">
@@ -60,7 +83,7 @@ const OpenSecret = () => {
       <h2 className="text-center text-2xl">open a one time secret!</h2>
       <textarea
         className=" mb-2 h-2/3 rounded-lg border-4 border-slate-800 bg-slate-100 p-2 text-sm tracking-tighter md:mb-6 md:h-3/4  md:text-2xl"
-        defaultValue={secret}
+        defaultValue={`${copied ? decryptedSecret : secret}`}
         onClick={handleSecretClick}
         ref={secretTextRef}
         readOnly

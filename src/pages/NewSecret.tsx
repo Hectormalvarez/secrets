@@ -1,28 +1,27 @@
-import React, { BaseSyntheticEvent, useRef, useState } from "react";
+import React, { BaseSyntheticEvent, useState } from "react";
+
+import { API, graphqlOperation } from 'aws-amplify'
+import { createSecret } from "../graphql/mutations"
+
 import NewSecretModal from "../components/modal/NewSecretModal";
 import { createID, encryptText } from "../utils";
 
-const initialSecret = {
-  secretID: "",
-  secretText: "",
-};
-
 const NewSecretForm = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [newSecret, setNewSecret] = useState(initialSecret);
   const [textAreaLength, setTextAreaLength] = useState(0)
-  const secretTextAreaRef = useRef<HTMLTextAreaElement>(null);
+  const [newSecretID, setNewSecretID] = useState("")
 
-  const handleNewSecretSubmit = (e: BaseSyntheticEvent) => {
+  const handleNewSecretSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault();
-    if (secretTextAreaRef && secretTextAreaRef.current) {
-      const encryptedSecret = encryptText(e.target.value, process.env.REACT_APP_KEY as string)
-      setNewSecret({
-        secretID: createID(),
-        secretText: encryptedSecret,
-      });
-      secretTextAreaRef.current.value = "";
-    }
+      const encryptedSecret = encryptText(e.target[0].value, "password")
+      try {
+        const secretID = createID()
+        await API.graphql(graphqlOperation(createSecret, { input: { id: secretID, secretText: encryptedSecret } }))
+        setNewSecretID(secretID)
+        e.target[0].value = ""
+      } catch (error) {
+        console.log(error)
+      }
     setModalIsOpen(true);
   };
 
@@ -31,7 +30,7 @@ const NewSecretForm = () => {
       <NewSecretModal
         isOpen={modalIsOpen}
         setIsOpen={setModalIsOpen}
-        secretID={newSecret.secretID}
+        secretID={newSecretID}
       />
       <form
         className="m-2 flex h-full flex-col justify-end md:px-8 md:mx-auto md:max-w-3xl relative"
@@ -43,7 +42,6 @@ const NewSecretForm = () => {
         <textarea
           className="mb-2 md:mb-6 h-2/3 rounded-lg border-4 border-slate-800 bg-slate-100 p-2 text-lg tracking-tighter md:h-3/4  md:text-2xl"
           placeholder="Private information you want to share goes here"
-          ref={secretTextAreaRef}
           required
           onChange={e => setTextAreaLength(e.target.textLength)}
           maxLength={500}
