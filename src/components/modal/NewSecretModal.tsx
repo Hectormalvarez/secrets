@@ -12,10 +12,6 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
     `https://secrets.taylormadetech.net/open-secret/${secretID}`
   );
 
-  const handleCopyToClipboardClick = () => {
-    copySecretLink();
-  };
-
   const closeModal = () => {
     if (copied) {
       setCopied(false);
@@ -112,7 +108,7 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
                     className="
                     md:text-md flex w-full items-center justify-center rounded-md border border-transparent bg-slate-500 px-4 py-2 text-white shadow-md
                       hover:bg-blue-100 md:ml-3 md:w-auto md:hover:text-slate-700"
-                    onClick={handleCopyToClipboardClick}
+                    onClick={copySecretLink}
                   >
                     <p className="grow">Copy to Clipboard!</p>
                     <ClipboardCheckIcon className="h-8 w-8" />
