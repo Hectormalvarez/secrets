@@ -4,7 +4,6 @@ import useCopy from "use-copy";
 import { useParams } from "react-router-dom";
 
 import { ToastContainer, Slide, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 import { encryptText, decryptText } from "../utils";
 
@@ -17,10 +16,10 @@ const OpenSecret = () => {
 
   const handleSecretClick = () => {
     if (copied) {
-      copy()
-      setCopied(true)
+      copy();
+      setCopied(true);
       secretTextRef.current?.select();
-      toast.success("Copied to Clipboard!", {
+      toast.success("copied to clipboard!", {
         toastId: "already-open-error",
       });
     } else {
@@ -31,12 +30,11 @@ const OpenSecret = () => {
   };
 
   const handleOpenSecret = () => {
-    copy()
+    copy();
     setSecret(decryptText(secret as string, "password"));
     toast.dismiss();
     toast.success("Secret Opened and Copied to Clipboard!", {
       toastId: "opened-success",
-      autoClose: 3000,
     });
     secretTextRef.current?.select();
   };
@@ -49,14 +47,15 @@ const OpenSecret = () => {
   // use effect to select secret text once opened
   useEffect(() => {
     if (copied) secretTextRef.current?.select();
-  }, [secret, copied])
+  }, [secret, copied]);
 
   return (
-    <section className="relative m-2 flex h-full flex-col justify-center md:mx-auto md:max-w-3xl md:px-8">
+    <section className="m-2 flex h-full flex-col justify-center md:mx-auto md:max-w-3xl md:px-8">
       <ToastContainer
         transition={Slide}
         position={toast.POSITION.BOTTOM_CENTER}
         autoClose={1500}
+        className="open secret toast"
       />
       <h2 className="text-center text-2xl">open a one time secret!</h2>
       <textarea

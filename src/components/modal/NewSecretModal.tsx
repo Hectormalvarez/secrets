@@ -2,7 +2,6 @@ import { Fragment, BaseSyntheticEvent } from "react";
 
 import useCopy from "use-copy";
 import { ToastContainer, Slide, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 import { Dialog, Transition } from "@headlessui/react";
 import { ClipboardCheckIcon, DocumentAddIcon } from "@heroicons/react/outline";
@@ -26,7 +25,6 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
     setCopied(true);
     toast.dismiss();
     toast.success("Secret Link Copied!", {
-      position: toast.POSITION.TOP_LEFT,
       toastId: "copied-success",
     });
   };
@@ -38,7 +36,6 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
 
   const handleClickOutsideModal = () => {
     toast.warn("copy to clipboard to be able to create a new secret!", {
-      position: toast.POSITION.TOP_LEFT,
       toastId: "havent-copied-link-warning",
     });
   };
@@ -67,7 +64,11 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center md:items-center md:p-0">
-            <ToastContainer transition={Slide} />
+            <ToastContainer
+              transition={Slide}
+              position={toast.POSITION.TOP_LEFT}
+              className={"create secret toast"}
+            />
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-500"
