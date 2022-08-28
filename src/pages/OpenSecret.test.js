@@ -1,10 +1,8 @@
-import { screen, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import OpenSecret from "./OpenSecret";
 
-describe("<OpenSecret /> Page", () => {
-    it("loads successfully", () => {
+describe("<OpenSecret /> smoke test", () => {
+    it("renders without error", () => {
         render(<OpenSecret />)
-        expect(screen.getByRole("textbox")).toBeInTheDocument()
-        
     })
 });
