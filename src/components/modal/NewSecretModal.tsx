@@ -8,7 +8,7 @@ import { ClipboardCheckIcon, DocumentAddIcon } from "@heroicons/react/outline";
 
 export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
   const [copied, copy, setCopied] = useCopy(
-    `https://secrets.taylormadetech.net/open-secret/${secretID}`
+    `${window.location.origin}/open-secret/${secretID}`
   );
 
   const closeModal = () => {
@@ -96,7 +96,7 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
                         name="new-secret-link"
                         id="new-secret-link"
                         className="mt-2 w-full overflow-y-auto rounded-lg bg-slate-800 p-2 text-sm text-slate-200 "
-                        value={`https://secrets.taylormadetech.net/open-secret/${secretID}`}
+                        value={`${window.location.origin}/open-secret/${secretID}`}
                         onClick={handleSecretLinkClick}
                         readOnly
                       />
