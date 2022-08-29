@@ -52,7 +52,7 @@ const NewSecretForm = () => {
         />
         <button
           type="submit"
-          className="mb-6 bg-slate-700 py-4 text-2xl uppercase tracking-wider text-slate-200 shadow-lg shadow-slate-100 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
+          className="mb-6 rounded-lg border-4 border-slate-800 bg-slate-500 py-4 text-2xl uppercase tracking-wider text-slate-200 shadow-md shadow-slate-800 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
         >
           Create New Secret
         </button>
