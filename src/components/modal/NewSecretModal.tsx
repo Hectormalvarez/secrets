@@ -103,12 +103,13 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
                     </div>
                   </div>
                 </div>
-                <div className="bg-slate-800 px-4 py-3 md:flex md:flex-row-reverse md:px-6">
+                <div className="bg-slate-500 px-4 py-3 md:flex md:flex-row-reverse md:px-6">
                   <button
                     type="button"
                     className="
-                    md:text-md flex w-full items-center justify-center rounded-md border border-transparent bg-slate-500 px-4 py-2 text-white shadow-md
-                      hover:bg-blue-100 md:ml-3 md:w-auto md:hover:text-slate-700"
+                      md:text-lg flex w-full items-center justify-center rounded-md border-4 border-white bg-slate-500 px-4 py-2 text-white shadow-md
+                     hover:bg-blue-100 md:ml-3 md:w-auto md:hover:text-slate-700 md:font-bold tracking-wide
+                    "
                     onClick={copySecretLink}
                   >
                     <p className="grow">Copy to Clipboard!</p>
@@ -117,11 +118,11 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
                   <button
                     type="button"
                     className={`
-                      mt-3 flex w-full items-center justify-center rounded-md border px-4 py-2 text-base
+                      mt-3 flex w-full items-center justify-center rounded-md border-4 px-4 py-2 md:text-lg md:font-bold
                      md:mt-0 md:ml-3 md:w-auto 
                      ${
                        copied
-                         ? "border-gray-100 bg-gray-200 text-gray-700 md:cursor-pointer md:hover:bg-slate-300 md:hover:text-slate-900"
+                         ? "border-gray-700 bg-gray-200 text-gray-700 md:cursor-pointer md:hover:bg-slate-400 md:hover:text-white"
                          : "border-gray-300 bg-gray-400 text-gray-500 md:cursor-not-allowed"
                      }
                     `}
