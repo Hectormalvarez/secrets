@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, Slide, toast } from "react-toastify";
 import { decryptText } from "../utils";
 import { API, graphqlOperation } from 'aws-amplify'
@@ -14,12 +14,12 @@ const OpenSecret = () => {
   const [copied, copy, setCopied] = useCopy(decryptedSecret);
 
   const { secretID } = useParams();
+  let navigate = useNavigate();
 
   const handleSecretClick = () => {
     if (secret === "Unable to Download Secret") return;
     if (copied) {
       copy();
-      setCopied(true);
       secretTextRef.current?.select();
       toast.success("copied to clipboard!", {
         toastId: "already-open-error",
@@ -35,8 +35,6 @@ const OpenSecret = () => {
     if (secret === "Unable to Download Secret") return;
     copy();
     setCopied(true);
-    const decryptedText = decryptText(secret as string, "password")
-    setDecryptedSecret(decryptedText);
     toast.dismiss();
     toast.success("Secret Opened and Copied to Clipboard!", {
       toastId: "opened-success",
@@ -52,13 +50,15 @@ const OpenSecret = () => {
       setSecret(secretText)
     } catch (error) {
       setSecret("Unable to Download Secret")
-      toast.error("Unable to Download Secret")
+      toast.error("Unable to Download Secret", {
+        toastId: "download-secret-error"
+      })
     }
   }
 
   const destroySecret = async (secretID: string) => {
     try {
-      await API.graphql(graphqlOperation(deleteSecret, {input: {id: secretID}}))
+      await API.graphql(graphqlOperation(deleteSecret, { input: { id: secretID } }))
     } catch (error) {
       toast.error("Unable to destroy secret!", {
         autoClose: 3000
@@ -70,7 +70,11 @@ const OpenSecret = () => {
     if (secretID) {
       downloadSecret(secretID)
     }
-  }, [secretID]);
+    if (secret) {
+      const decryptedText = decryptText(secret as string, "password")
+      setDecryptedSecret(decryptedText);
+    }
+  }, [secretID, secret]);
 
   return (
     <section className="m-2 flex h-full flex-col justify-center md:mx-auto md:max-w-3xl md:px-8">
@@ -90,13 +94,29 @@ const OpenSecret = () => {
       />
       <button
         type="submit"
-        className="mb-6 bg-slate-700 py-4 text-2xl uppercase tracking-wider text-slate-200 shadow-lg shadow-slate-100 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
+        className="mb-4 bg-slate-700 py-4 text-2xl uppercase tracking-wider text-slate-200 shadow-lg shadow-slate-100 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
         onClick={!copied ? handleOpenSecret : handleSecretClick}
       >
-        {!copied ? "Open Secret!" : "Copy to Clipboard"}
+        {!copied ? "Open Secret!" : "Copy to Clipboard!"}
       </button>
+      <CreateNewSecretButton navigate={navigate} copied={copied} />
     </section>
   );
 };
 
 export default OpenSecret;
+
+const CreateNewSecretButton = ({ navigate, copied }: any) => {
+  if (copied) {
+    return (
+      <button
+        type="submit"
+        className="mb-6 bg-slate-200 py-4 text-2xl uppercase tracking-wider text-slate-700 shadow-lg shadow-slate-600 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
+        onClick={() => { navigate("/new-secret", { replace: true }) }}
+      >
+        Create New Secret!
+      </button>
+    )
+  }
+  return <br></br>
+};
