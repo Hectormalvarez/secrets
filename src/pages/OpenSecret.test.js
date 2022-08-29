@@ -6,7 +6,7 @@ jest.mock("nanoid", () => {
 });
 
 describe("<OpenSecret /> smoke test", () => {
-    it("renders without error", () => {
-        render(<OpenSecret />)
-    })
+  it("renders without error", () => {
+    render(<OpenSecret />);
+  });
 });

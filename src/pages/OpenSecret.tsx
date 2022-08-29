@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, Slide, toast } from "react-toastify";
 import { decryptText } from "../utils";
-import { API, graphqlOperation } from 'aws-amplify'
+import { API, graphqlOperation } from "aws-amplify";
 import { getSecret } from "../graphql/queries";
 import { deleteSecret } from "../graphql/mutations";
 import useCopy from "use-copy";
 
 const OpenSecret = () => {
   const [secret, setSecret] = useState("");
-  const [decryptedSecret, setDecryptedSecret] = useState("")
+  const [decryptedSecret, setDecryptedSecret] = useState("");
   const secretTextRef = useRef<HTMLTextAreaElement>(null);
   const [copied, copy, setCopied] = useCopy(decryptedSecret);
 
@@ -40,38 +40,42 @@ const OpenSecret = () => {
       toastId: "opened-success",
     });
     secretTextRef.current?.select();
-    destroySecret(secretID as string)
+    destroySecret(secretID as string);
   };
 
   const downloadSecret = async (secretID: string) => {
     try {
-      const secretData: any = await API.graphql(graphqlOperation(getSecret, { id: secretID }))
-      const secretText = secretData.data.getSecret.secretText
-      setSecret(secretText)
+      const secretData: any = await API.graphql(
+        graphqlOperation(getSecret, { id: secretID })
+      );
+      const secretText = secretData.data.getSecret.secretText;
+      setSecret(secretText);
     } catch (error) {
-      setSecret("Unable to Download Secret")
+      setSecret("Unable to Download Secret");
       toast.error("Unable to Download Secret", {
-        toastId: "download-secret-error"
-      })
+        toastId: "download-secret-error",
+      });
     }
-  }
+  };
 
   const destroySecret = async (secretID: string) => {
     try {
-      await API.graphql(graphqlOperation(deleteSecret, { input: { id: secretID } }))
+      await API.graphql(
+        graphqlOperation(deleteSecret, { input: { id: secretID } })
+      );
     } catch (error) {
       toast.error("Unable to destroy secret!", {
-        autoClose: 3000
-      })
+        autoClose: 3000,
+      });
     }
-  }
+  };
 
   useEffect(() => {
     if (secretID) {
-      downloadSecret(secretID)
+      downloadSecret(secretID);
     }
     if (secret) {
-      const decryptedText = decryptText(secret as string, "password")
+      const decryptedText = decryptText(secret as string, "password");
       setDecryptedSecret(decryptedText);
     }
   }, [secretID, secret]);
@@ -112,11 +116,13 @@ const CreateNewSecretButton = ({ navigate, copied }: any) => {
       <button
         type="submit"
         className="mb-6 bg-slate-200 py-4 text-2xl uppercase tracking-wider text-slate-700 shadow-lg shadow-slate-600 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
-        onClick={() => { navigate("/new-secret", { replace: true }) }}
+        onClick={() => {
+          navigate("/new-secret", { replace: true });
+        }}
       >
         Create New Secret!
       </button>
-    )
+    );
   }
-  return <br></br>
+  return <br></br>;
 };

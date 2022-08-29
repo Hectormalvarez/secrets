@@ -1,11 +1,10 @@
-import React from 'react'
-import { render, screen } from '@testing-library/react'
+import React from "react";
+import { render, screen } from "@testing-library/react";
 
-import Footer from './Footer'
+import Footer from "./Footer";
 
-describe('<Footer /> smoke test', () => {
+describe("<Footer /> smoke test", () => {
   it("renders without error", () => {
-    render(<Footer />)
-
+    render(<Footer />);
   });
 });
