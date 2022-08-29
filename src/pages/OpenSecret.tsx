@@ -81,7 +81,7 @@ const OpenSecret = () => {
   }, [secretID, secret]);
 
   return (
-    <section className="m-2 flex h-full flex-col justify-center md:mx-auto md:max-w-3xl md:px-8">
+    <section className="m-2 flex h-full flex-col md:mx-auto md:max-w-3xl md:px-8">
       <ToastContainer
         transition={Slide}
         position={toast.POSITION.BOTTOM_CENTER}
@@ -96,26 +96,29 @@ const OpenSecret = () => {
         ref={secretTextRef}
         readOnly
       />
-      <button
-        type="submit"
-        className="mb-4 bg-slate-700 py-4 text-2xl uppercase tracking-wider text-slate-200 shadow-lg shadow-slate-100 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
-        onClick={!copied ? handleOpenSecret : handleSecretClick}
-      >
-        {!copied ? "Open Secret!" : "Copy to Clipboard!"}
-      </button>
-      <CreateNewSecretButton navigate={navigate} copied={copied} />
+      <OpenSecretButton
+        copied={copied}
+        handleOpenSecret={handleOpenSecret}
+        handleSecretClick={handleSecretClick}
+        secret={secret}
+      />
+      <CreateNewSecretButton
+        navigate={navigate}
+        copied={copied}
+        secret={secret}
+      />
     </section>
   );
 };
 
 export default OpenSecret;
 
-const CreateNewSecretButton = ({ navigate, copied }: any) => {
-  if (copied) {
+const CreateNewSecretButton = ({ navigate, copied, secret }: any) => {
+  if (copied || secret === "Unable to Download Secret") {
     return (
       <button
         type="submit"
-        className="mb-6 bg-slate-200 py-4 text-2xl uppercase tracking-wider text-slate-700 shadow-lg shadow-slate-600 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
+        className="mb-6 border-4 border-slate-700 bg-slate-200 py-4 text-2xl uppercase tracking-wider text-slate-700 shadow-lg shadow-slate-600 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
         onClick={() => {
           navigate("/new-secret", { replace: true });
         }}
@@ -125,4 +128,22 @@ const CreateNewSecretButton = ({ navigate, copied }: any) => {
     );
   }
   return <br></br>;
+};
+
+const OpenSecretButton = ({
+  copied,
+  handleOpenSecret,
+  handleSecretClick,
+  secret,
+}: any) => {
+  if (secret === "Unable to Download Secret") return <br />;
+  return (
+    <button
+      type="submit"
+      className="mb-4 border-4 border-slate-700 bg-slate-600 py-4 text-2xl uppercase tracking-wider text-slate-200 shadow-lg shadow-slate-100 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
+      onClick={!copied ? handleOpenSecret : handleSecretClick}
+    >
+      {!copied ? "Open Secret!" : "Copy to Clipboard!"}
+    </button>
+  );
 };
