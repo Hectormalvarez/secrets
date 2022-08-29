@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 .open.secret.toast {
-  @apply w-full font-bold capitalize text-slate-900 md:w-7/12 md:text-2xl;
+  @apply w-full font-bold capitalize text-slate-900 md:w-1/2 md:text-2xl xl:w-1/4;
 }
 
 .create.secret.toast {
-  @apply w-full font-bold capitalize text-slate-900 md:w-8/12 md:text-2xl;
+  @apply w-full font-bold capitalize text-slate-900 md:w-1/2 md:text-2xl xl:w-1/4;
 }
