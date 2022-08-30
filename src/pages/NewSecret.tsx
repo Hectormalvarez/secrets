@@ -6,7 +6,7 @@ import { createSecret } from "../graphql/mutations";
 import NewSecretModal from "../components/modal/NewSecretModal";
 
 import { createID, encryptText } from "../utils";
-import { ToastContainer, Slide, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const NewSecretForm = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -46,11 +46,6 @@ const NewSecretForm = () => {
 
   return (
     <>
-      <ToastContainer
-        transition={Slide}
-        position={toast.POSITION.TOP_LEFT}
-        className={"create secret toast"}
-      />
       <NewSecretModal
         isOpen={modalIsOpen}
         setIsOpen={setModalIsOpen}

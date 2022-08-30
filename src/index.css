@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.open.secret.toast {
-  @apply w-full font-bold capitalize text-slate-900 md:w-1/2  2xl:w-4/12 md:text-2xl;
-}
-
-.create.secret.toast {
-  @apply w-full font-bold capitalize text-slate-900 md:w-1/2 2xl:w-4/12 md:text-2xl text-center;
+.secret.toast {
+  @apply w-full font-bold capitalize text-slate-900 md:w-2/3 md:text-2xl text-center;
 }

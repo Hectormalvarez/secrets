@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ToastContainer, Slide, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { decryptText } from "../utils";
 import { API, graphqlOperation } from "aws-amplify";
 import { getSecret } from "../graphql/queries";
@@ -82,12 +82,6 @@ const OpenSecret = () => {
 
   return (
     <section className="m-2 flex h-full flex-col md:mx-auto md:max-w-3xl md:px-8">
-      <ToastContainer
-        transition={Slide}
-        position={toast.POSITION.BOTTOM_CENTER}
-        autoClose={1500}
-        className="open secret toast"
-      />
       <h2 className="text-center text-2xl">open a one time secret!</h2>
       <textarea
         className=" mb-2 h-2/3 rounded-lg border-4 border-slate-800 bg-slate-100 p-2 text-sm tracking-tighter md:mb-6 md:h-3/4  md:text-2xl"
