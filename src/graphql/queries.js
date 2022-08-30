@@ -6,6 +6,7 @@ export const getSecret = /* GraphQL */ `
     getSecret(id: $id) {
       id
       secretText
+      expiration
       createdAt
       updatedAt
     }
@@ -21,6 +22,7 @@ export const listSecrets = /* GraphQL */ `
       items {
         id
         secretText
+        expiration
         createdAt
         updatedAt
       }

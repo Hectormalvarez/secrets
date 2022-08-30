@@ -6,6 +6,7 @@ export const onCreateSecret = /* GraphQL */ `
     onCreateSecret {
       id
       secretText
+      expiration
       createdAt
       updatedAt
     }
@@ -16,6 +17,7 @@ export const onUpdateSecret = /* GraphQL */ `
     onUpdateSecret {
       id
       secretText
+      expiration
       createdAt
       updatedAt
     }
@@ -26,6 +28,7 @@ export const onDeleteSecret = /* GraphQL */ `
     onDeleteSecret {
       id
       secretText
+      expiration
       createdAt
       updatedAt
     }
