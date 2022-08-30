@@ -1,14 +1,16 @@
 # secrets app - for sharing one time secrets
 
-This project is mean to make sharing private information _such as passwords, account numbers, etc._ easier for everybody
+This project is meant to make sharing private information _such as passwords, account numbers, etc._ easier for everybody
 
 anyone will be able to store a secret in the cloud that is protected by aes-256 encryption at rest as well as SSL encryption during transmition
 
-there will also be a function to share secrets without a password
+there will also be a function to share secrets without a password (not secure)
 
 project todo list
 
-- [ ] share one time open secrets
+- [X] share one time open secrets
+- [ ] add expiration dates to secrest and notify users
+- [ ] allow users to customize expiration
 - [ ] add password protection option to secrets
 - [ ] add user login function so users can store secrets
 - [ ] add sharing function so users can share stored secrets
