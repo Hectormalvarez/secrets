@@ -8,10 +8,16 @@ import NewSecretModal from "../components/modal/NewSecretModal";
 import { createID, encryptText } from "../utils";
 import { toast } from "react-toastify";
 
+type secret = {
+  id: string
+  secretText: string
+  expiration: Date
+}
+
 const NewSecretForm = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [textAreaLength, setTextAreaLength] = useState(0); // used to show character limit in text area
-  const [newSecretID, setNewSecretID] = useState(""); // holds secretID to pass to modal
+  const [secret, setSecret] = useState<secret | null>(null); // holds secretID to pass to modal
 
   const handleNewSecretSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault();
@@ -22,27 +28,29 @@ const NewSecretForm = () => {
       toast.warn("please enter a secret!");
       return;
     }
-    // encrypt text and save in variable to upload
-    const encryptedSecret = encryptText(e.target[0].value, "password");
     try {
+      // encrypt text and save in variable to upload
+      const encryptedSecret = encryptText(e.target[0].value, "password");
       // create id for new secret
       const secretID = createID();
       // create expiration date for secret (6 hours from current time)
-      const secretDate = new Date(); // get's current datetime
-      secretDate.setHours(secretDate.getHours() + 48) // adds 48hours
+      const secretExpirationDate = new Date(); // get's current datetime
+      secretExpirationDate.setHours(secretExpirationDate.getHours() + 48) // adds 48hours
+      // create object for secret upload
+      const newSecret: secret = {
+        id: secretID,
+        secretText: encryptedSecret,
+        expiration: secretExpirationDate,
+      }
 
       // upload secret to the cloud
       await API.graphql(
         graphqlOperation(createSecret, {
-          input: {
-            id: secretID,
-            secretText: encryptedSecret,
-            expiration: secretDate,
-          },
+          input: { newSecret },
         })
       );
       // save secretid in state
-      setNewSecretID(secretID);
+      setSecret(newSecret);
       // clear form
       e.target[0].value = "";
       // notify user of success uploading
@@ -60,7 +68,7 @@ const NewSecretForm = () => {
       <NewSecretModal
         isOpen={modalIsOpen}
         setIsOpen={setModalIsOpen}
-        secretID={newSecretID}
+        secret={secret}
       />
       <form
         className="m-2 flex h-full flex-col justify-end md:mx-auto md:max-w-3xl md:justify-start md:px-8"
