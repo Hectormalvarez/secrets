@@ -1,7 +1,7 @@
 import { Fragment, BaseSyntheticEvent } from "react";
 
 import useCopy from "use-copy";
-import { ToastContainer, Slide, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 import { Dialog, Transition } from "@headlessui/react";
 import { ClipboardCheckIcon, DocumentAddIcon } from "@heroicons/react/outline";
