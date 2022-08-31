@@ -64,11 +64,6 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center md:items-center md:p-0">
-            <ToastContainer
-              transition={Slide}
-              position={toast.POSITION.TOP_LEFT}
-              className={"create secret toast"}
-            />
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-500"
