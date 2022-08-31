@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, useState } from "react";
+import React, { BaseSyntheticEvent, useState, useRef } from "react";
 
 import { API, graphqlOperation } from "aws-amplify";
 import { createSecret } from "../graphql/mutations";
@@ -18,6 +18,7 @@ const NewSecretForm = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [textAreaLength, setTextAreaLength] = useState(0); // used to show character limit in text area
   const [secret, setSecret] = useState<secret | null>(null); // holds secretID to pass to modal
+  const toastId: any = useRef(null);
 
   const handleNewSecretSubmit = async (e: BaseSyntheticEvent) => {
     e.preventDefault();
@@ -28,6 +29,9 @@ const NewSecretForm = () => {
       toast.warn("please enter a secret!");
       return;
     }
+
+    toastId.current = toast("uploading...", { autoClose: false });
+
     try {
       // encrypt text and save in variable to upload
       const encryptedSecret = encryptText(e.target[0].value, "password");
@@ -54,7 +58,7 @@ const NewSecretForm = () => {
       // clear form
       e.target[0].value = "";
       // notify user of success uploading
-      toast.success("secret uploaded to the cloud and link created!");
+      toast.update(toastId.current, { render: "secret uploaded to the cloud and link created!", type: toast.TYPE.SUCCESS, autoClose: 5000 });
     } catch (error) {
       // notify user of error uploading
       toast.error("unable to upload secret!");
