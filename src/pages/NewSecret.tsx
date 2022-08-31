@@ -30,7 +30,7 @@ const NewSecretForm = () => {
       // create expiration date for secret (6 hours from current time)
       const secretDate = new Date(); // get's current datetime
       secretDate.setHours(secretDate.getHours() + 48) // adds 48hours
-      
+
       // upload secret to the cloud
       await API.graphql(
         graphqlOperation(createSecret, {
