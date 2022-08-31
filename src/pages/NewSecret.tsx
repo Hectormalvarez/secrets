@@ -46,7 +46,7 @@ const NewSecretForm = () => {
       // upload secret to the cloud
       await API.graphql(
         graphqlOperation(createSecret, {
-          input: { newSecret },
+          input: newSecret,
         })
       );
       // save secretid in state
