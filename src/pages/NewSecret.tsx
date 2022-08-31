@@ -86,7 +86,7 @@ const NewSecretForm = () => {
         >
           Create New Secret
         </button>
-        <p className="pb-4 text-lg md:text-2xl uppercase font-bold tracking-wider">secrets expire after 48 hours!</p>
+        <p className="text-center pb-4 text-lg md:text-2xl uppercase font-bold tracking-wider">secrets expire after 48 hours!</p>
       </form>
     </>
   );
