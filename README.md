@@ -9,7 +9,7 @@ there will also be a function to share secrets without a password (not secure)
 project todo list
 
 - [X] share one time open secrets
-- [ ] add expiration dates to secrest and notify users
+- [X] add expiration dates to secrest and notify users
 - [ ] allow users to customize expiration
 - [ ] add password protection option to secrets
 - [ ] add user login function so users can store secrets
@@ -20,3 +20,9 @@ to run development server
 ```
 yarn dev
 ```
+
+production website:
+[secrets.taylormadetech.net](https://secrets.taylormadetech.net)
+
+development website:
+[dev-secrets.taylormadetech.net](https://dev-secrets.taylormadetech.net)
