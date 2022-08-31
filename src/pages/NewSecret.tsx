@@ -68,7 +68,7 @@ const NewSecretForm = () => {
       <NewSecretModal
         isOpen={modalIsOpen}
         setIsOpen={setModalIsOpen}
-        secret={secret}
+        secretID={secret ? `${secret.id}` : "loading"}
       />
       <form
         className="m-2 flex h-full flex-col justify-end md:mx-auto md:max-w-3xl md:justify-start md:px-8"
