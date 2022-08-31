@@ -108,7 +108,7 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
                     type="button"
                     className="
                       md:text-lg flex w-full items-center justify-center rounded-md border-4 border-white bg-slate-500 px-4 py-2 text-white shadow-md
-                     hover:bg-blue-100 md:ml-3 md:w-auto md:hover:text-slate-700 md:font-bold tracking-wide
+                     hover:bg-blue-100 md:ml-3 md:w-auto md:hover:text-slate-700 md:font-bold tracking-wide md:transition-all md:duration-300 md:hover:scale-105
                     "
                     onClick={copySecretLink}
                   >
@@ -122,7 +122,7 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
                      md:mt-0 md:ml-3 md:w-auto 
                      ${
                        copied
-                         ? "border-gray-700 bg-gray-200 text-gray-700 md:cursor-pointer md:hover:bg-slate-400 md:hover:text-white"
+                         ? "border-gray-700 bg-gray-200 text-gray-700 md:cursor-pointer md:hover:bg-slate-400 md:hover:text-white md:transition-all md:duration-300 md:hover:scale-105"
                          : "border-gray-300 bg-gray-400 text-gray-500 md:cursor-not-allowed"
                      }
                     `}

@@ -5,3 +5,9 @@
 .secret.toast {
   @apply w-full font-bold capitalize text-slate-900 md:w-2/3 md:text-2xl text-center;
 }
+
+@media screen and (max-height: 300px) {
+  .landscape-keyboard {
+    @apply fixed top-0 left-0 
+  }
+}

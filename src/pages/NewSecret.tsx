@@ -71,7 +71,7 @@ const NewSecretForm = () => {
         </label>
         <div className="w-full h-3/5 relative mb-2">
           <textarea
-            className="w-full h-full rounded-lg border-4 border-slate-800 bg-slate-100 p-2 text-lg tracking-tighter md:mb-6 md:text-2xl"
+            className="landscape-keyboard w-full h-full rounded-lg border-4 border-slate-800 bg-slate-100 p-2 text-lg tracking-tighter md:mb-6 md:text-2xl"
             placeholder="Private information you want to share goes here"
             onChange={(e) => setTextAreaLength(e.target.textLength)}
             maxLength={500}
@@ -82,11 +82,11 @@ const NewSecretForm = () => {
         </div>
         <button
           type="submit"
-          className="mb-6 rounded-lg border-4 border-slate-800 bg-slate-500 py-4 text-2xl uppercase tracking-wider text-slate-200 shadow-md shadow-slate-800 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
+          className="mb-6 rounded-lg border-4 border-slate-800 bg-slate-500 py-4 text-2xl md:transition-all md:duration-300 md:hover:scale-105 uppercase tracking-wider text-slate-200 shadow-md shadow-slate-800 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
         >
           Create New Secret
         </button>
-        <p className="text-2xl uppercase font-bold tracking-wider">secrets expire after 48 hours!</p>
+        <p className="pb-4 text-lg md:text-2xl uppercase font-bold tracking-wider">secrets expire after 48 hours!</p>
       </form>
     </>
   );

@@ -84,7 +84,7 @@ const OpenSecret = () => {
     <section className="m-2 flex h-full flex-col md:mx-auto md:max-w-3xl md:px-8">
       <h2 className="text-center text-2xl">open a one time secret!</h2>
       <textarea
-        className=" mb-2 h-2/3 rounded-lg border-4 border-slate-800 bg-slate-100 p-2 text-sm tracking-tighter md:mb-6 md:h-3/4  md:text-2xl"
+        className="landscape-keyboard mb-2 h-2/3 rounded-lg border-4 border-slate-800 bg-slate-100 p-2 text-sm tracking-tighter md:mb-6 md:h-3/4  md:text-2xl"
         defaultValue={`${copied ? decryptedSecret : secret}`}
         onClick={handleSecretClick}
         ref={secretTextRef}
@@ -112,7 +112,7 @@ const CreateNewSecretButton = ({ navigate, copied, secret }: any) => {
     return (
       <button
         type="submit"
-        className="mb-6 border-4 border-slate-700 bg-slate-200 py-4 text-2xl uppercase tracking-wider text-slate-700 shadow-lg shadow-slate-600 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
+        className="mb-6 rounded-md border-4 border-slate-700 bg-slate-200 py-4 text-2xl uppercase tracking-wider text-slate-700 shadow-lg shadow-slate-600 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700 md:transition-all md:duration-300 md:hover:scale-105"
         onClick={() => {
           navigate("/new-secret", { replace: true });
         }}
@@ -121,7 +121,7 @@ const CreateNewSecretButton = ({ navigate, copied, secret }: any) => {
       </button>
     );
   }
-  return <br></br>;
+  return <></>;
 };
 
 const OpenSecretButton = ({
@@ -134,7 +134,7 @@ const OpenSecretButton = ({
   return (
     <button
       type="submit"
-      className="mb-4 border-4 border-slate-700 bg-slate-600 py-4 text-2xl uppercase tracking-wider text-slate-200 shadow-lg shadow-slate-100 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
+      className="mb-4 rounded-md border-4 border-white bg-slate-600 py-4 text-2xl uppercase tracking-wider text-slate-200 shadow-lg shadow-slate-700 md:py-6 md:text-4xl md:font-bold md:transition-all md:duration-300 md:hover:scale-105 md:hover:bg-slate-300 md:hover:text-slate-800"
       onClick={!copied ? handleOpenSecret : handleSecretClick}
     >
       {!copied ? "Open Secret!" : "Copy to Clipboard!"}
