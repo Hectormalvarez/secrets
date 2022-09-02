@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+
 import { toast } from "react-toastify";
-import { decryptText } from "../utils";
+import useCopy from "use-copy";
+
 import { API, graphqlOperation } from "aws-amplify";
 import { getSecret } from "../graphql/queries";
 import { deleteSecret } from "../graphql/mutations";
-import useCopy from "use-copy";
+
+import { decryptText } from "../utils";
+
 
 const OpenSecret = () => {
   const [secret, setSecret] = useState("");
@@ -152,7 +156,7 @@ const OpenSecret = () => {
 
 const CreateNewSecretButton = ({ navigate, copied, secret }: any) => {
   // if clipboard or secret contain unable to download error show create secret button
-  if (copied || secret.secretText === "Unable to Download Secret") {
+  if (copied || secret === "Unable to Download Secret") {
     return (
       <button
         type="submit"
@@ -198,7 +202,7 @@ const OpenSecretButton = ({
   secret, // secret data
 }: any) => {
   // if secret contain unable to download error show create secret button
-  if (secret.secretText === "Unable to Download Secret") return <></>;
+  if (secret === "Unable to Download Secret") return <></>;
   return (
     <button
       type="submit"
