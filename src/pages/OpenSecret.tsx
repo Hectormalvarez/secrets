@@ -18,7 +18,6 @@ const OpenSecret = () => {
   const [copied, copy, setCopied] = useCopy(decryptedSecret);
 
   const { secretID } = useParams();
-  let navigate = useNavigate();
 
   const handleSecretClick = () => {
     // if secret not found based on ID returns doing nothing
@@ -146,7 +145,6 @@ const OpenSecret = () => {
         secret={secret}
       />
       <CreateNewSecretButton
-        navigate={navigate}
         copied={copied}
         secret={secret}
       />
@@ -154,7 +152,9 @@ const OpenSecret = () => {
   );
 };
 
-const CreateNewSecretButton = ({ navigate, copied, secret }: any) => {
+const CreateNewSecretButton = ({ copied, secret }: any) => {
+  let navigate = useNavigate();
+
   // if clipboard or secret contain unable to download error show create secret button
   if (copied || secret === "Unable to Download Secret") {
     return (
