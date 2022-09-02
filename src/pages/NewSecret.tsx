@@ -9,10 +9,10 @@ import { createID, encryptText } from "../utils";
 import { toast } from "react-toastify";
 
 type secret = {
-  id: string
-  secretText: string
-  expiration: Date
-}
+  id: string;
+  secretText: string;
+  expiration: Date;
+};
 
 const NewSecretForm = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -39,13 +39,13 @@ const NewSecretForm = () => {
       const secretID = createID();
       // create expiration date for secret (6 hours from current time)
       const secretExpirationDate = new Date(); // get's current datetime
-      secretExpirationDate.setHours(secretExpirationDate.getHours() + 48) // adds 48hours
+      secretExpirationDate.setHours(secretExpirationDate.getHours() + 12); // adds 12hours
       // create object for secret upload
       const newSecret: secret = {
         id: secretID,
         secretText: encryptedSecret,
         expiration: secretExpirationDate,
-      }
+      };
 
       // upload secret to the cloud
       await API.graphql(
@@ -75,15 +75,54 @@ const NewSecretForm = () => {
         secretID={secret ? `${secret.id}` : "loading"}
       />
       <form
-        className="m-2 flex h-full flex-col justify-end md:mx-auto md:max-w-3xl md:justify-start md:px-8"
+        className="
+          m-2
+          flex
+          h-full
+          flex-col
+          justify-end
+          md:mx-auto
+          md:max-w-3xl
+          md:justify-start
+          md:px-8
+        "
         onSubmit={handleNewSecretSubmit}
       >
-        <label className="text-center text-3xl font-bold tracking-wider text-slate-800 md:text-4xl">
+        <label
+          className="
+            text-center
+            text-3xl
+            font-bold
+            tracking-wider
+            text-slate-800
+            md:text-4xl
+          "
+        >
           Enter a New Secret
         </label>
-        <div className="w-full h-3/5 relative mb-2">
+        <div
+          className="
+            relative
+            mb-2
+            h-3/5
+            w-full
+          "
+        >
           <textarea
-            className="landscape-keyboard w-full h-full rounded-lg border-4 border-slate-800 bg-slate-100 p-2 text-lg tracking-tighter md:mb-6 md:text-2xl"
+            className="
+              landscape-keyboard
+              h-full
+              w-full
+              rounded-lg
+              border-4
+              border-slate-800
+              bg-slate-100
+              p-2
+              text-lg
+              tracking-tighter
+              md:mb-6
+              md:text-2xl
+            "
             placeholder="Private information you want to share goes here"
             onChange={(e) => setTextAreaLength(e.target.textLength)}
             maxLength={500}
@@ -94,11 +133,45 @@ const NewSecretForm = () => {
         </div>
         <button
           type="submit"
-          className="mb-6 rounded-lg border-4 border-slate-800 bg-slate-500 py-4 text-2xl md:transition-all md:duration-300 md:hover:scale-105 uppercase tracking-wider text-slate-200 shadow-md shadow-slate-800 md:py-6 md:text-4xl md:font-bold md:hover:bg-slate-400 md:hover:text-slate-100 md:hover:shadow-slate-700"
+          className="
+          mb-6
+          rounded-lg
+          border-4
+          border-slate-800
+          bg-slate-500
+          py-4
+          text-2xl
+          uppercase
+          tracking-wider
+          text-slate-200
+          shadow-md
+          shadow-slate-800
+          md:py-6
+          md:text-4xl
+          md:font-bold
+          md:transition-all
+          md:duration-300
+          md:hover:scale-105
+          md:hover:bg-slate-400
+          md:hover:text-slate-100
+          md:hover:shadow-slate-700
+          "
         >
           Create New Secret
         </button>
-        <p className="text-center pb-4 text-lg md:text-2xl uppercase font-bold tracking-wider">secrets expire after 48 hours!</p>
+        <p
+          className="
+            pb-4
+            text-center
+            text-lg
+            font-bold
+            uppercase
+            tracking-wider
+            md:text-2xl
+            "
+        >
+          secrets expire after 12 hours!
+        </p>
       </form>
     </>
   );
