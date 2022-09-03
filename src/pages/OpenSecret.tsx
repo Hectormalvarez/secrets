@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
-import useCopy from "use-copy";
 
 import { API, graphqlOperation } from "aws-amplify";
 import { getSecret } from "../graphql/queries";
@@ -12,48 +11,16 @@ import { decryptText } from "../utils";
 
 
 const OpenSecret = () => {
-  const [secret, setSecret] = useState("");
-  const [decryptedSecret, setDecryptedSecret] = useState("");
   const secretTextRef = useRef<HTMLTextAreaElement>(null);
-  const [copied, copy, setCopied] = useCopy(decryptedSecret);
-
   const { secretID } = useParams();
 
+
   const handleSecretClick = () => {
-    // if secret not found based on ID returns doing nothing
-    if (secret === "Unable to Download Secret") return;
-    // using 'copied' as signal that secret has been opened
-    // when secret is opened it is copied to clipboard and copied = true
-    if (copied) {
-      // if secret has already been opened clicking on the secret will re-copy to clipboard
-      copy();
-      secretTextRef.current?.select(); // highlights text area to give user feedback of copy
-      toast.success("copied to clipboard!", {
-        // notifys user of copy success
-        toastId: "already-open-error",
-      });
-    } else {
-      // if secret hasnt been opened yet user is notified of the requirement
-      toast.error("Open Secret First!", {
-        toastId: "secret-click-error",
-      });
-    }
+
   };
 
   const handleOpenSecret = () => {
-    // if secret not found based on ID returns doing nothing
-    if (secret === "Unable to Download Secret") return;
-    copy(); // copies secret to clipboard
-    setCopied(true); // sets copied state to true
-    toast.dismiss(); // removes previous toasts
-    // notifies user of opening and copying to clipboard
-    toast.success("Secret Opened and Copied to Clipboard!", {
-      toastId: "opened-success",
-    });
-    // selects text area as visual feedback to user that text is copied
-    secretTextRef.current?.select();
-    // deletes secret from cloud
-    destroySecret(secretID as string);
+
   };
 
   // function to retreive secret from cloud
@@ -62,10 +29,8 @@ const OpenSecret = () => {
       const secretData: any = await API.graphql(
         graphqlOperation(getSecret, { id: secretID })
       );
-      const secretText = secretData.data.getSecret.secretText;
-      setSecret(secretText);
+      return secretData.data.getSecret.secretText;
     } catch (error) {
-      setSecret("Unable to Download Secret");
       toast.error("Unable to Download Secret", {
         toastId: "download-secret-error",
       });
@@ -74,28 +39,14 @@ const OpenSecret = () => {
 
   // function for deleting secrets from cloud
   const destroySecret = async (secretID: string) => {
-    try {
-      await API.graphql(
-        graphqlOperation(deleteSecret, { input: { id: secretID } })
-      );
-    } catch (error) {
-      toast.error("Unable to destroy secret!", {
-        autoClose: 3000,
-      });
-    }
+    await API.graphql(
+      graphqlOperation(deleteSecret, { input: { id: secretID } })
+    );
   };
 
   useEffect(() => {
-    // if secretID parameter is found download secret from cloud
-    if (secretID) {
-      downloadSecret(secretID);
-    }
-    // if secret downloaded decrypt text for reveal
-    if (secret) {
-      const decryptedText = decryptText(secret as string, "password");
-      setDecryptedSecret(decryptedText);
-    }
-  }, [secretID, secret]);
+    console.log(secretID)
+  }, [secretID]);
 
   return (
     <section
@@ -133,26 +84,21 @@ const OpenSecret = () => {
           md:h-3/4
           md:text-2xl
         "
-        defaultValue={`${copied ? decryptedSecret : secret}`}
         onClick={handleSecretClick} // copies text to clipboard if open
         ref={secretTextRef}
         readOnly
       />
       <OpenSecretButton
-        copied={copied}
         handleOpenSecret={handleOpenSecret}
         handleSecretClick={handleSecretClick}
-        secret={secret}
       />
       <CreateNewSecretButton
-        copied={copied}
-        secret={secret}
       />
     </section>
   );
 };
 
-const CreateNewSecretButton = ({ copied, secret }: any) => {
+const CreateNewSecretButton = ({ }: any) => {
   let navigate = useNavigate();
 
   // if clipboard or secret contain unable to download error show create secret button
@@ -195,14 +141,8 @@ const CreateNewSecretButton = ({ copied, secret }: any) => {
   return <></>;
 };
 
-const OpenSecretButton = ({
-  copied, // secret is open or not
-  handleOpenSecret, // opens secret
-  handleSecretClick, // handles clicking on button or textarea
-  secret, // secret data
-}: any) => {
+const OpenSecretButton = ({ }: any) => {
   // if secret contain unable to download error show create secret button
-  if (secret === "Unable to Download Secret") return <></>;
   return (
     <button
       type="submit"
@@ -228,10 +168,8 @@ const OpenSecretButton = ({
         md:hover:bg-slate-300
         md:hover:text-slate-800
       "
-      // if secret hasnt been opened button opens secret, if secret is open button re-copies to clipboard
-      onClick={!copied ? handleOpenSecret : handleSecretClick}
     >
-      {!copied ? "Open Secret!" : "Copy to Clipboard!"}
+      open secret!
     </button>
   );
 };
