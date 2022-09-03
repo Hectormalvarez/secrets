@@ -50,15 +50,7 @@ const OpenSecret = () => {
 
   return (
     <section
-      className="
-        m-2
-        flex
-        h-full
-        flex-col
-        md:mx-auto
-        md:max-w-3xl
-        md:px-8
-      "
+      className="open-secret-section"
     >
       <h2
         className="
@@ -69,21 +61,7 @@ const OpenSecret = () => {
         open a one time secret!
       </h2>
       <textarea
-        className="
-          landscape-keyboard
-          mb-2
-          h-2/3
-          rounded-lg
-          border-4
-          border-slate-800
-          bg-slate-100
-          p-2
-          text-sm
-          tracking-tighter
-          md:mb-6
-          md:h-3/4
-          md:text-2xl
-        "
+        className="open-secret-ta"
         onClick={handleSecretClick} // copies text to clipboard if open
         ref={secretTextRef}
         readOnly
@@ -100,45 +78,17 @@ const OpenSecret = () => {
 
 const CreateNewSecretButton = ({ }: any) => {
   let navigate = useNavigate();
-
-  // if clipboard or secret contain unable to download error show create secret button
-  if (copied || secret === "Unable to Download Secret") {
-    return (
-      <button
-        type="submit"
-        className="
-          mb-6
-          rounded-md
-          border-4
-          border-slate-700
-          bg-slate-200
-          py-4
-          text-2xl
-          uppercase
-          tracking-wider
-          text-slate-700
-          shadow-lg
-          shadow-slate-600
-          md:py-6
-          md:text-4xl
-          md:font-bold
-          md:transition-all
-          md:duration-300
-          md:hover:scale-105
-          md:hover:bg-slate-400
-          md:hover:text-slate-100
-          md:hover:shadow-slate-700
-        "
-        onClick={() => {
-          navigate("/new-secret", { replace: true });
-        }}
-      >
-        Create New Secret!
-      </button>
-    );
-  }
-  // returns empty component otherwise
-  return <></>;
+  return (
+    <button
+      type="submit"
+      className="create-new-secret button"
+      onClick={() => {
+        navigate("/new-secret", { replace: true });
+      }}
+    >
+      Create New Secret!
+    </button>
+  );
 };
 
 const OpenSecretButton = ({ }: any) => {
@@ -146,28 +96,7 @@ const OpenSecretButton = ({ }: any) => {
   return (
     <button
       type="submit"
-      className="
-        mb-4
-        rounded-md
-        border-4
-        border-white
-        bg-slate-600
-        py-4
-        text-2xl
-        uppercase
-        tracking-wider
-        text-slate-200
-        shadow-lg
-        shadow-slate-700
-        md:py-6
-        md:text-4xl
-        md:font-bold
-        md:transition-all
-        md:duration-300
-        md:hover:scale-105
-        md:hover:bg-slate-300
-        md:hover:text-slate-800
-      "
+      className="open-secret button"
     >
       open secret!
     </button>
