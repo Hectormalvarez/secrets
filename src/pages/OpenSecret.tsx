@@ -1,11 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 
+import { API, graphqlOperation } from "aws-amplify"
 import { getSecret } from "../graphql/queries"
+import { deleteSecret } from "../graphql/mutations";
 
 import useAPI from '../hooks/use-api';
 import { decryptText } from "../utils";
-import { BaseSyntheticEvent } from 'react';
 
 const OpenSecret = () => {
   const secretTextRef = useRef<HTMLTextAreaElement>(null);
@@ -14,12 +15,27 @@ const OpenSecret = () => {
   const { isLoading, error, sendAPICall } = useAPI()
   const { secretID } = useParams()
 
-  const handleOpenSecret = (e: BaseSyntheticEvent) => {
+  const destroySecret = async () => {
+    try {
+      await API.graphql(graphqlOperation(deleteSecret, { input: { id: secretID } }))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleOpenSecret = () => {
     const secretText = decryptText(secretData.getSecret.secretText, "password")
     setSecretIsDecrypted(true)
+
     const newSecretData = { ...secretData }
     newSecretData.getSecret.secretText = secretText
     setSecretData(newSecretData)
+    destroySecret()
+  };
+
+  const handleCopyToClipboard = () => {
+    console.log("COPIED TO CLIPBOARD")
+    secretTextRef.current!.focus()
   };
 
   if (secretTextRef.current) {
@@ -29,9 +45,11 @@ const OpenSecret = () => {
   }
 
   useEffect(() => {
-    const downloadSecret = async () => await sendAPICall({ id: secretID }, getSecret, setSecretData)
-    downloadSecret()
-  }, [secretID, sendAPICall])
+    if (!secretIsDecrypted) {
+      const downloadSecret = async () => await sendAPICall({ id: secretID }, getSecret, setSecretData)
+      downloadSecret()
+    }
+  }, [secretID, sendAPICall, secretIsDecrypted])
 
 
   return (
@@ -52,7 +70,7 @@ const OpenSecret = () => {
         disabled
         readOnly
       />
-      <OpenSecretButton error={error} isLoading={isLoading} handleOpenSecret={handleOpenSecret} secretIsDecrypted={secretIsDecrypted} />
+      <OpenSecretButton error={error} isLoading={isLoading} handleOnClick={!secretIsDecrypted ? handleOpenSecret: handleCopyToClipboard} secretIsDecrypted={secretIsDecrypted} />
       <CreateNewSecretButton error={error} secretIsDecrypted={secretIsDecrypted} useNavigate={useNavigate} />
     </section>
   );
@@ -74,13 +92,22 @@ const CreateNewSecretButton = ({ secretIsDecrypted, error, useNavigate }: any) =
   return <></>;
 }
 
-const OpenSecretButton = ({ isLoading, handleOpenSecret, secretIsDecrypted, error }: any) => {
-  if (secretIsDecrypted || error) return <></>;
+const OpenSecretButton = ({ isLoading, handleOnClick, secretIsDecrypted, error }: any) => {
+  if (error) return <></>;
+  if (secretIsDecrypted) return (
+    <button
+      type="submit"
+      className="open-secret button"
+      onClick={handleOnClick}
+    >
+      copy to clipboard!
+    </button>
+  )
   return (
     <button
       type="submit"
       className="open-secret button"
-      onClick={handleOpenSecret}
+      onClick={handleOnClick}
     >
       {isLoading ? "loading" : "open secret!"}
     </button>
