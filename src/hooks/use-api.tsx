@@ -6,7 +6,7 @@ const useAPI = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<null | string>()
 
-  const sendAPICall = useCallback(async (input: {}, graphqlOp: any, setData: any) => {
+  const sendAPICall = useCallback(async (input: {}, graphqlOp: any, setData?: any) => {
     setIsLoading(true);
     setError(null);
     try {
@@ -16,7 +16,7 @@ const useAPI = () => {
       if (!APICallResponse.data.getSecret) {
         throw new Error("Secret not found!");
       }
-      setData(APICallResponse.data)
+      if (setData) setData(APICallResponse.data)
     } catch (error: any) {
       setError(error.message || 'Something went wrong!')
     }
