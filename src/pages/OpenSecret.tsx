@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { getSecret } from "../graphql/queries"
 
@@ -27,7 +27,7 @@ const OpenSecret = () => {
     else { secretTextRef.current!.value = "loading..." }
     if (error) secretTextRef.current!.value = error as string
   }
-  
+
   useEffect(() => {
     const downloadSecret = async () => await sendAPICall({ id: secretID }, getSecret, setSecretData)
     downloadSecret()
@@ -53,17 +53,19 @@ const OpenSecret = () => {
         readOnly
       />
       <OpenSecretButton error={error} isLoading={isLoading} handleOpenSecret={handleOpenSecret} secretIsDecrypted={secretIsDecrypted} />
-      <CreateNewSecretButton error={error} secretIsDecrypted={secretIsDecrypted} />
+      <CreateNewSecretButton error={error} secretIsDecrypted={secretIsDecrypted} useNavigate={useNavigate} />
     </section>
   );
 };
 
-const CreateNewSecretButton = ({ secretIsDecrypted, error }: any) => {
+const CreateNewSecretButton = ({ secretIsDecrypted, error, useNavigate }: any) => {
+  const navigate = useNavigate()
   if (secretIsDecrypted || error) {
     return (
       <button
         type="submit"
         className="create-new-secret button"
+        onClick={() => { navigate("/") }}
       >
         Create New Secret!
       </button>
