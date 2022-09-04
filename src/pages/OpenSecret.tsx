@@ -1,26 +1,38 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
 
-import { API, graphqlOperation } from "aws-amplify";
-import { getSecret } from "../graphql/queries";
-import { deleteSecret } from "../graphql/mutations";
+import { getSecret } from "../graphql/queries"
 
+import useAPI from '../hooks/use-api';
+import { decryptText } from "../utils";
+import { BaseSyntheticEvent } from 'react';
 
 const OpenSecret = () => {
   const secretTextRef = useRef<HTMLTextAreaElement>(null);
+  const [secretData, setSecretData] = useState<any>()
+  const [secretIsDecrypted, setSecretIsDecrypted] = useState(false)
+  const { isLoading, error, sendAPICall } = useAPI()
+  const { secretID } = useParams()
 
-  const downloadSecret = async (secretID: string) => {
-    const secretData: any = await API.graphql(
-      graphqlOperation(getSecret, { id: secretID })
-    );
-    return secretData.data.getSecret.secretText;
+  const handleOpenSecret = (e: BaseSyntheticEvent) => {
+    const secretText = decryptText(secretData.getSecret.secretText, "password")
+    setSecretIsDecrypted(true)
+    const newSecretData = { ...secretData }
+    newSecretData.getSecret.secretText = secretText
+    setSecretData(newSecretData)
   };
 
-  // function for deleting secrets from cloud
-  const destroySecret = async (secretID: string) => {
-    await API.graphql(
-      graphqlOperation(deleteSecret, { input: { id: secretID } })
-    );
-  };
+  if (secretTextRef.current) {
+    if (secretData) { secretTextRef.current!.value = secretData.getSecret.secretText }
+    else { secretTextRef.current!.value = "loading..." }
+    if (error) secretTextRef.current!.value = error as string
+  }
+  
+  useEffect(() => {
+    const downloadSecret = async () => await sendAPICall({ id: secretID }, getSecret, setSecretData)
+    downloadSecret()
+  }, [secretID, sendAPICall])
+
 
   return (
     <section
@@ -35,34 +47,40 @@ const OpenSecret = () => {
         open a one time secret!
       </h2>
       <textarea
-        className="open-secret-ta"
+        className={`${error ? "textarea-error" : ""} open-secret-textarea`}
         ref={secretTextRef}
+        disabled
         readOnly
       />
-      <OpenSecretButton />
-      <CreateNewSecretButton />
+      <OpenSecretButton error={error} isLoading={isLoading} handleOpenSecret={handleOpenSecret} secretIsDecrypted={secretIsDecrypted} />
+      <CreateNewSecretButton error={error} secretIsDecrypted={secretIsDecrypted} />
     </section>
   );
 };
 
-const CreateNewSecretButton = () => {
-  return (
-    <button
-      type="submit"
-      className="create-new-secret button"
-    >
-      Create New Secret!
-    </button>
-  );
-};
+const CreateNewSecretButton = ({ secretIsDecrypted, error }: any) => {
+  if (secretIsDecrypted || error) {
+    return (
+      <button
+        type="submit"
+        className="create-new-secret button"
+      >
+        Create New Secret!
+      </button>
+    );
+  };
+  return <></>;
+}
 
-const OpenSecretButton = () => {
+const OpenSecretButton = ({ isLoading, handleOpenSecret, secretIsDecrypted, error }: any) => {
+  if (secretIsDecrypted || error) return <></>;
   return (
     <button
       type="submit"
       className="open-secret button"
+      onClick={handleOpenSecret}
     >
-      open secret!
+      {isLoading ? "loading" : "open secret!"}
     </button>
   );
 };
