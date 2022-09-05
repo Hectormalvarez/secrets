@@ -1,12 +1,14 @@
-import React, { BaseSyntheticEvent, useState, useRef } from "react";
+import React, { BaseSyntheticEvent, useState, useRef, Fragment } from "react";
 
 import { API, graphqlOperation } from "aws-amplify";
 import { createSecret } from "../graphql/mutations";
+import { toast } from "react-toastify";
+import { PencilIcon } from "@heroicons/react/outline";
+import { Listbox, Transition } from '@headlessui/react'
 
 import NewSecretModal from "../components/modal/NewSecretModal";
 
 import { createID, encryptText } from "../utils";
-import { toast } from "react-toastify";
 
 type secret = {
   id: string;
@@ -14,10 +16,17 @@ type secret = {
   expiration: Date;
 };
 
+const expirationDurations: any = [
+  { value: 1, name: "1 Hour" },
+  { value: 4, name: "4 Hours" },
+  { value: 12, name: "12 Hours" },
+];
+
 const NewSecretForm = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [textAreaLength, setTextAreaLength] = useState(0); // used to show character limit in text area
   const [secret, setSecret] = useState<secret | null>(null); // holds secretID to pass to modal
+  const [expiration, setExpiration] = useState(expirationDurations[0]);
   const toastId: any = useRef(null);
 
   const handleNewSecretSubmit = async (e: BaseSyntheticEvent) => {
@@ -39,7 +48,7 @@ const NewSecretForm = () => {
       const secretID = createID();
       // create expiration date for secret (6 hours from current time)
       const secretExpirationDate = new Date(); // get's current datetime
-      secretExpirationDate.setHours(secretExpirationDate.getHours() + 12); // adds 12hours
+      secretExpirationDate.setHours(secretExpirationDate.getHours() + expiration.value);
       // create object for secret upload
       const newSecret: secret = {
         id: secretID,
@@ -131,6 +140,53 @@ const NewSecretForm = () => {
             {textAreaLength}/500
           </p>
         </div>
+
+        <div
+          className="
+            text-center
+            text-lg
+            font-bold
+            uppercase
+            tracking-wider
+            flex
+            justify-center
+            items-center
+            md:text-2xl
+            "
+        >
+          <Listbox as="div" className="p-2 hover:cursor-pointer" value={expiration} onChange={setExpiration}>
+            <Listbox.Button className="flex">
+              <PencilIcon className="w-6 h-6" />
+            </Listbox.Button>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Listbox.Options className="absolute mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="px-1 py-1 ">
+                  {expirationDurations.map((expirationTime: any) => (
+                    <Listbox.Option
+                      key={expirationTime.name}
+                      value={expirationTime}
+                      className={({ active }) =>
+                        `relative cursor-pointer text-sm md:text-base py-2 pl-10 pr-4 ${active ? 'bg-slate-600 text-slate-200' : 'text-slate-900'}`
+                      }
+                    >
+                      {expirationTime.name}
+                    </Listbox.Option>
+                  ))}
+                </div>
+              </Listbox.Options>
+            </Transition>
+          </Listbox>
+          <p className="tracking-tighter font-light">secrets expire after {expiration.name}!</p>
+
+        </div>
         <button
           type="submit"
           className="
@@ -159,19 +215,6 @@ const NewSecretForm = () => {
         >
           Create New Secret
         </button>
-        <p
-          className="
-            pb-4
-            text-center
-            text-lg
-            font-bold
-            uppercase
-            tracking-wider
-            md:text-2xl
-            "
-        >
-          secrets expire after 12 hours!
-        </p>
       </form>
     </>
   );
