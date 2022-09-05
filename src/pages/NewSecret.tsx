@@ -3,6 +3,9 @@ import React, { BaseSyntheticEvent, useState, useRef, Fragment } from "react";
 import { API, graphqlOperation } from "aws-amplify";
 import { createSecret } from "../graphql/mutations";
 import { toast } from "react-toastify";
+import utc from 'dayjs/plugin/utc'
+import dayjs from 'dayjs'
+
 import { PencilIcon } from "@heroicons/react/outline";
 import { Listbox, Transition } from '@headlessui/react'
 
@@ -10,10 +13,12 @@ import NewSecretModal from "../components/modal/NewSecretModal";
 
 import { createID, encryptText } from "../utils";
 
+dayjs.extend(utc)
+
 type secret = {
   id: string;
   secretText: string;
-  expiration: Date;
+  expiration: number;
 };
 
 const expirationDurations: any = [
@@ -47,8 +52,7 @@ const NewSecretForm = () => {
       // create id for new secret
       const secretID = createID();
       // create expiration date for secret (6 hours from current time)
-      const secretExpirationDate = new Date(); // get's current datetime
-      secretExpirationDate.setHours(secretExpirationDate.getHours() + expiration.value);
+      const secretExpirationDate = dayjs.utc().unix(); // get's current datetime
       // create object for secret upload
       const newSecret: secret = {
         id: secretID,
