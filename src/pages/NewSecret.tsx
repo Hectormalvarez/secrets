@@ -10,7 +10,6 @@ import { PencilIcon } from "@heroicons/react/outline";
 import { Listbox, Transition } from '@headlessui/react'
 
 import NewSecretModal from "../components/modal/NewSecretModal";
-
 import { createID, encryptText } from "../utils";
 
 dayjs.extend(utc)
@@ -41,23 +40,18 @@ const NewSecretForm = () => {
     if (e.target[0].value === "") {
       // warn user that secret is required
       toast.warn("please enter a secret!");
+      // return function early
       return;
     }
-
+    // secret creation feedback that upload is pending
     toastId.current = toast("uploading...", { autoClose: false });
 
     try {
-      // encrypt text and save in variable to upload
-      const encryptedSecret = encryptText(e.target[0].value, "password");
-      // create id for new secret
-      const secretID = createID();
-      // create expiration date for secret (6 hours from current time)
-      const secretExpirationDate = dayjs.utc().unix(); // get's current datetime
       // create object for secret upload
       const newSecret: secret = {
-        id: secretID,
-        secretText: encryptedSecret,
-        expiration: secretExpirationDate,
+        id: createID(),
+        secretText: encryptText(e.target[0].value, "password"),
+        expiration: dayjs.utc().add(expiration.value, 'hour').unix(),
       };
 
       // upload secret to the cloud
