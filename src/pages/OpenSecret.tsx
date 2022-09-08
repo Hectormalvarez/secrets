@@ -54,31 +54,32 @@ const OpenSecret = () => {
     // copies decrypted secret
     copyToClipboard(secretData.getSecret.secretText);
     // alerts user of actions taken
-    toast.success("copied to clipboard!", { toastId: "copied-clipboard-toast" });
+    toast.success("copied to clipboard!", {
+      toastId: "copied-clipboard-toast",
+    });
     // focus the textarea text as feedback of copy
     secretTextRef.current?.select();
   };
 
   if (secretTextRef.current) {
-    // sets textarea value to secretText
-    if (secretData) {
-      secretTextRef.current!.value = secretData.getSecret.secretText;
-    }
-    // textarea value is "loading..." while secret downloads
-    else {
+    // sets textarea value to secretText if it's loaded & not expired
+    if (secretData && !error) {
+      // focus secretText once decrypted
+      if (secretIsDecrypted) secretTextRef.current?.select();
+    } else if (!error) {
+      // textarea value is "loading..." while secret downloads
       secretTextRef.current!.value = "loading...";
     }
-    //  displays error in text area
     if (error) {
       // alerts user of error
-      toast.error("Unable to download Secret", { toastId: "unable-download-toast" })
+      toast.error("Unable to download Secret", {
+        toastId: "unable-download-toast",
+      });
       // set textarea value to error
       secretTextRef.current!.value = error as string;
     }
-    else {
-      // focus secretText once decrypted
-      if (secretIsDecrypted) secretTextRef.current?.select();
-    }
+    // focus secretText once decrypted
+    if (secretIsDecrypted) secretTextRef.current?.select();
   }
 
   useEffect(() => {
