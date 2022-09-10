@@ -3,24 +3,26 @@ import React, { BaseSyntheticEvent, useState, useRef, Fragment } from "react";
 import { API, graphqlOperation } from "aws-amplify";
 import { createSecret } from "../graphql/mutations";
 import { toast } from "react-toastify";
-import utc from 'dayjs/plugin/utc'
-import dayjs from 'dayjs'
+import utc from "dayjs/plugin/utc";
+import dayjs from "dayjs";
 
 import { PencilIcon } from "@heroicons/react/outline";
-import { Listbox, Transition } from '@headlessui/react'
+import { Listbox, Transition } from "@headlessui/react";
 
 import NewSecretModal from "../components/modal/NewSecretModal";
 import { createID, encryptText } from "../utils";
 
-dayjs.extend(utc)
+dayjs.extend(utc);
 
-type secret = {
+export type secret = {
   id: string;
   secretText: string;
   expiration: number;
+  passphraseProtected: boolean;
+  decryptAttempts: number;
 };
 
-const expirationDurations: any = [
+const expirationDurations: { value: number; name: string }[] = [
   { value: 1, name: "1 Hour" },
   { value: 4, name: "4 Hours" },
   { value: 12, name: "12 Hours" },
@@ -40,20 +42,30 @@ const NewSecretForm = () => {
     if (e.target[0].value === "") {
       // warn user that secret is required
       toast.warn("please enter a secret!");
-      // return function early
-      return;
+      return; // return function early
     }
     // secret creation feedback that upload is pending
     toastId.current = toast("uploading...", { autoClose: false });
 
     try {
+      let secretPassphrase;
+      let passphraseProtected;
+      // if password field has a value use it to encrypt text
+      if (e.target[2].value) {
+        secretPassphrase = e.target[2].value;
+        passphraseProtected = true;
+      } else {
+        secretPassphrase = "password";
+        passphraseProtected = false;
+      }
       // create object for secret upload
       const newSecret: secret = {
         id: createID(),
-        secretText: encryptText(e.target[0].value, "password"),
-        expiration: dayjs.utc().add(expiration.value, 'hour').unix(),
+        secretText: encryptText(e.target[0].value, secretPassphrase),
+        expiration: dayjs.utc().add(expiration.value, "hours").unix(),
+        passphraseProtected: passphraseProtected,
+        decryptAttempts: 0
       };
-
       // upload secret to the cloud
       await API.graphql(
         graphqlOperation(createSecret, {
@@ -64,11 +76,20 @@ const NewSecretForm = () => {
       setSecret(newSecret);
       // clear form
       e.target[0].value = "";
+      if (e.target[2].value) e.target[2].value = "";
       // notify user of success uploading
-      toast.update(toastId.current, { render: "secret uploaded to the cloud and link created!", type: toast.TYPE.SUCCESS, autoClose: 5000 });
+      toast.update(toastId.current, {
+        render: "secret uploaded to the cloud and link created!",
+        type: toast.TYPE.SUCCESS,
+        autoClose: 5000,
+      });
     } catch (error) {
       // notify user of error uploading
-      toast.error("unable to upload secret!");
+      toast.update(toastId.current, {
+        render: "unable to upload secret!",
+        type: toast.TYPE.ERROR,
+        autoClose: 5000,
+      });
       console.log(error);
     }
     setModalIsOpen(true);
@@ -88,6 +109,7 @@ const NewSecretForm = () => {
           h-full
           flex-col
           justify-end
+          py-4
           md:mx-auto
           md:max-w-3xl
           md:justify-start
@@ -95,66 +117,72 @@ const NewSecretForm = () => {
         "
         onSubmit={handleNewSecretSubmit}
       >
-        <label
-          className="
-            text-center
-            text-3xl
-            font-bold
-            tracking-wider
-            text-slate-800
-            md:text-4xl
-          "
-        >
-          Enter a New Secret
-        </label>
         <div
           className="
             relative
-            mb-2
-            h-3/5
+            h-2/5
             w-full
-          "
+            "
         >
+          <label
+            className="
+                text-center
+                text-3xl
+                font-bold
+                tracking-wider
+                text-slate-800
+                md:text-4xl
+              "
+          >
+            Enter a New Secret
+          </label>
           <textarea
             className="
               landscape-keyboard
-              h-full
+              h-3/4
               w-full
               rounded-lg
               border-4
               border-slate-800
-              bg-slate-100
+              bg-slate-200
               p-2
               text-lg
               tracking-tighter
-              md:mb-6
               md:text-2xl
             "
             placeholder="Private information you want to share goes here"
             onChange={(e) => setTextAreaLength(e.target.textLength)}
             maxLength={500}
           />
-          <p className="absolute bottom-4 right-8 text-lg md:text-2xl">
+          <p className="absolute bottom-4 right-2 text-lg text-slate-500 md:bottom-10 md:right-4 md:text-2xl">
             {textAreaLength}/500
           </p>
         </div>
 
         <div
           className="
-            text-center
+            flex
+            items-center
+            text-left
             text-lg
             font-bold
             uppercase
             tracking-wider
-            flex
-            justify-center
-            items-center
+            mb-6
             md:text-2xl
             "
         >
-          <Listbox as="div" className="p-2 hover:cursor-pointer" value={expiration} onChange={setExpiration}>
-            <Listbox.Button className="flex">
-              <PencilIcon className="w-6 h-6" />
+          <p className="font-light tracking-tighter pt-2">
+            secrets expire after {expiration.name}!
+          </p>
+          <Listbox
+            as="div"
+            className="p-2 hover:cursor-pointer"
+            value={expiration}
+            onChange={setExpiration}
+          >
+            <Listbox.Button className="hover: flex rounded-lg border-2 border-slate-800 p-1 shadow-md shadow-slate-700 hover:bg-slate-200">
+              <PencilIcon className="h-6 w-6" />
             </Listbox.Button>
             <Transition
               as={Fragment}
@@ -172,7 +200,11 @@ const NewSecretForm = () => {
                       key={expirationTime.name}
                       value={expirationTime}
                       className={({ active }) =>
-                        `relative cursor-pointer text-sm md:text-base py-2 pl-10 pr-4 ${active ? 'bg-slate-600 text-slate-200' : 'text-slate-900'}`
+                        `relative cursor-pointer pl-10 pr-4 text-sm md:text-base ${
+                          active
+                            ? "bg-slate-600 text-slate-200"
+                            : "text-slate-900"
+                        }`
                       }
                     >
                       {expirationTime.name}
@@ -182,34 +214,26 @@ const NewSecretForm = () => {
               </Listbox.Options>
             </Transition>
           </Listbox>
-          <p className="tracking-tighter font-light">secrets expire after {expiration.name}!</p>
-
         </div>
+        <div className="mx-auto mb-8 flex w-full flex-col items-start justify-center">
+          <label
+            className="mb-2 text-sm font-bold tracking-tighter md:text-xl md:tracking-wider"
+            htmlFor="passphrase"
+          >
+            (optional: require passphrase to open secret)
+          </label>
+          <input
+            className="w-full rounded-md p-4 "
+            type="password"
+            name="passphrase"
+            placeholder="Enter a passphrase here"
+            id="passphrase"
+          />
+        </div>
+
         <button
           type="submit"
-          className="
-          mb-6
-          rounded-lg
-          border-4
-          border-slate-800
-          bg-slate-500
-          py-4
-          text-2xl
-          uppercase
-          tracking-wider
-          text-slate-200
-          shadow-md
-          shadow-slate-800
-          md:py-6
-          md:text-4xl
-          md:font-bold
-          md:transition-all
-          md:duration-300
-          md:hover:scale-105
-          md:hover:bg-slate-400
-          md:hover:text-slate-100
-          md:hover:shadow-slate-700
-          "
+          className="open-secret button"
         >
           Create New Secret
         </button>
