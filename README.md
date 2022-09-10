@@ -11,7 +11,7 @@ project todo list
 - [X] share one time open secrets
 - [X] add expiration dates to secrest and notify users
 - [X] allow users to customize expiration
-- [ ] add password protection option to secrets
+- [X] add password protection option to secrets
 - [ ] add user login function so users can store secrets
 - [ ] add sharing function so users can share stored secrets
 
