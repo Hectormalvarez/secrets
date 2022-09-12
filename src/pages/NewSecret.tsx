@@ -1,6 +1,6 @@
 import React, { BaseSyntheticEvent, useState, useRef, Fragment } from "react";
 
-import { API, graphqlOperation } from "aws-amplify";
+import { API } from "aws-amplify";
 import { createSecret } from "../graphql/mutations";
 import { toast } from "react-toastify";
 import utc from "dayjs/plugin/utc";
@@ -68,9 +68,11 @@ const NewSecretForm = () => {
       };
       // upload secret to the cloud
       await API.graphql(
-        graphqlOperation(createSecret, {
-          input: newSecret,
-        })
+        {
+          query: createSecret,
+          variables: {input: newSecret},
+          authMode: "AWS_IAM"
+        }
       );
       // save secretid in state
       setSecret(newSecret);

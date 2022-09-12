@@ -1,6 +1,6 @@
 import CryptoJS from "crypto-js";
 import { nanoid } from "nanoid";
-import { API, graphqlOperation } from "aws-amplify";
+import { API } from "aws-amplify";
 import { updateSecret, deleteSecret } from "./graphql/mutations";
 
 
@@ -16,7 +16,11 @@ export const createID = () => nanoid();
 // deletes secret from cloud
 export const destroySecret = async (id: string) => {
   try {
-    await API.graphql(graphqlOperation(deleteSecret, { input: { id } }));
+    await API.graphql({
+      query: deleteSecret,
+      variables: {input: {id}},
+      authMode: "AWS_IAM"
+    });
   } catch (error) {
     console.log(error);
   }
@@ -27,7 +31,11 @@ export const updateSecretDecryptAttempts = async (input: {
   decryptAttempts: number;
 }) => {
   try {
-    await API.graphql(graphqlOperation(updateSecret, { input }));
+    await API.graphql({
+      query: updateSecret,
+      variables: {input: {...input}},
+      authMode: "AWS_IAM"
+    });
   } catch (error) {
     console.log(error);
   }
