@@ -1,14 +1,14 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "secrets073a3f63_identitypool_073a3f63",
+    "identityPoolName": "secretsd88a8958_identitypool_d88a8958",
     "allowUnauthenticatedIdentities": true,
-    "resourceNameTruncated": "secret073a3f63",
-    "userPoolName": "secrets073a3f63_userpool_073a3f63",
+    "resourceNameTruncated": "secretd88a8958",
+    "userPoolName": "secretsd88a8958_userpool_d88a8958",
     "autoVerifiedAttributes": [
       "email"
     ],
-    "mfaConfiguration": "ON",
+    "mfaConfiguration": "OPTIONAL",
     "mfaTypes": [
       "SMS Text Message",
       "TOTP"
@@ -32,10 +32,10 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "secret073a3f63_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "secretd88a8958_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "073a3f63",
-    "resourceName": "secrets073a3f63073a3f63",
+    "sharedId": "d88a8958",
+    "resourceName": "secretsd88a8958d88a8958",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "manual",
     "thirdPartyAuth": false,

@@ -1,6 +1,12 @@
 export type AmplifyDependentResourcesAttributes = {
+    "api": {
+        "secrets": {
+            "GraphQLAPIIdOutput": "string",
+            "GraphQLAPIEndpointOutput": "string"
+        }
+    },
     "auth": {
-        "secrets073a3f63073a3f63": {
+        "secretsd88a8958d88a8958": {
             "IdentityPoolId": "string",
             "IdentityPoolName": "string",
             "UserPoolId": "string",
@@ -9,12 +15,6 @@ export type AmplifyDependentResourcesAttributes = {
             "AppClientIDWeb": "string",
             "AppClientID": "string",
             "CreatedSNSRole": "string"
-        }
-    },
-    "api": {
-        "secrets": {
-            "GraphQLAPIIdOutput": "string",
-            "GraphQLAPIEndpointOutput": "string"
         }
     }
 }

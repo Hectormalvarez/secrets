@@ -1,6 +1,36 @@
 {
+  "api": {
+    "secrets": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "secretsd88a8958d88a8958",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ],
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authsecretsd88a8958d88a8958"
+            }
+          },
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ]
+        }
+      }
+    }
+  },
   "auth": {
-    "secrets073a3f63073a3f63": {
+    "secretsd88a8958d88a8958": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -17,7 +47,7 @@
           "passwordPolicyMinLength": 8,
           "passwordPolicyCharacters": []
         },
-        "mfaConfiguration": "ON",
+        "mfaConfiguration": "OPTIONAL",
         "mfaTypes": [
           "SMS",
           "TOTP"
@@ -25,36 +55,6 @@
         "verificationMechanisms": [
           "EMAIL"
         ]
-      }
-    }
-  },
-  "api": {
-    "secrets": {
-      "service": "AppSync",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "secrets073a3f63073a3f63",
-          "attributes": [
-            "UserPoolId"
-          ]
-        }
-      ],
-      "output": {
-        "authConfig": {
-          "defaultAuthentication": {
-            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-            "userPoolConfig": {
-              "userPoolId": "authsecrets073a3f63073a3f63"
-            }
-          },
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AWS_IAM"
-            }
-          ]
-        }
       }
     }
   }
