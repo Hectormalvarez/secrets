@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import NewSecretModal from "../components/modal/NewSecretModal";
-import NewSecretForm, { secret } from "../components/layout/NewSecretForm";
+import NewSecretForm, { secret } from "../components/form/NewSecretForm";
 
 const NewSecret = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);

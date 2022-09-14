@@ -16,36 +16,4 @@
       md:hover:scale-105
   }
   
-  .open-secret-textarea {
-    @apply mb-2
-      h-1/4
-      rounded-lg
-      border-4
-      border-slate-800
-      bg-slate-100
-      p-2
-      text-sm
-      tracking-tighter
-      md:mb-6
-      md:text-2xl;
-  }
-  
-  .open-secret-textarea.textarea-error {
-    @apply pt-16
-        text-center
-        text-5xl
-        font-bold
-        uppercase
-        tracking-wide
-       text-red-700;
-  }
-  
-  .open-secret-section {
-    @apply m-2
-          flex
-          h-full
-          flex-col
-          md:mx-auto
-          md:max-w-3xl
-          md:px-8;
-  }
+

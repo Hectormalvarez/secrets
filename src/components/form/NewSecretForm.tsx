@@ -6,8 +6,8 @@ import utc from "dayjs/plugin/utc";
 import dayjs from "dayjs";
 
 
-import EnterSecretInput from "../form/NewSecretInput"
-import SecretExpiration from "../form/NewSecretExpiration"
+import EnterSecretInput from "./NewSecretInput"
+import NewSecretExpiration from "./NewSecretExpiration"
 import "./NewSecretForm.css"
 import { createID, encryptText } from "../../utils";
 
@@ -95,7 +95,7 @@ const NewSecretForm = ({setSecret, setModalIsOpen}: any) => {
   return (
     <form className="secret form" onSubmit={handleNewSecretSubmit}>
       <EnterSecretInput />
-      <SecretExpiration expiration={expiration} setExpiration={setExpiration} expirationDurations={expirationDurations} />
+      <NewSecretExpiration expiration={expiration} setExpiration={setExpiration} expirationDurations={expirationDurations} />
       <div className="mx-auto mb-8 flex w-full flex-col items-start justify-center">
         <label
           className="mb-2 text-sm font-bold tracking-tighter md:text-xl md:tracking-wider"
