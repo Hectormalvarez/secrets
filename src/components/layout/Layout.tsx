@@ -2,6 +2,7 @@ import React from "react";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import Footer from "./Footer";
 import Header from "./Header";
+import "./Layout.css"
 
 function Layout(props: any) {
   return (

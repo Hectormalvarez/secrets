@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-
+import "./App.css"
 import Layout from "./components/layout/Layout"; 
 
 import NewSecret from "./pages/NewSecret";

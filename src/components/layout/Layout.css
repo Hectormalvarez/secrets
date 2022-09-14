@@ -1,0 +1,3 @@
+.secret.toast {
+    @apply w-full text-center font-bold capitalize text-slate-900 md:w-2/3 md:text-2xl;
+  }

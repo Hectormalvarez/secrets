@@ -185,7 +185,7 @@ const CreateNewSecretButton = ({
   return (
     <button
       type="submit"
-      className="create-new-secret button"
+      className="secret button"
       onClick={() => {
         navigate("/");
       }}
@@ -218,7 +218,7 @@ const OpenSecretButton = ({
   return (
     <button
       type="submit"
-      className="open-secret button"
+      className="secret button"
       onClick={handleOnClick}
     >
       {isLoading ? "loading" : "open secret!"}

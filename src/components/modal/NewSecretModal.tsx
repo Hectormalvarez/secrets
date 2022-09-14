@@ -50,6 +50,7 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
         "
         onClose={!copied ? handleClickOutsideModal : closeModal}
       >
+        {/* screen overlay */}
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-500"
@@ -59,7 +60,6 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          {/* screen overlay */}
           <div
             className="
               fixed
@@ -71,6 +71,8 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
             aria-hidden="true"
           />
         </Transition.Child>
+
+
 
         <div
           className="
