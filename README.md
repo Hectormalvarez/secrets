@@ -12,8 +12,8 @@ project todo list
 - [X] add expiration dates to secrest and notify users
 - [X] allow users to customize expiration
 - [X] add password protection option to secrets
-- [ ] add user login function so users can store secrets
 - [ ] add sharing function so users can share stored secrets
+- [ ] add user login function so users can store secrets
 
 to run development server
 
