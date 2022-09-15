@@ -2,9 +2,9 @@ import { Fragment, BaseSyntheticEvent } from "react";
 
 import useCopy from "use-copy";
 import { toast } from "react-toastify";
-
 import { Dialog, Transition } from "@headlessui/react";
 import { ClipboardCheckIcon, DocumentAddIcon } from "@heroicons/react/outline";
+import "./NewSecretModal.css";
 
 export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
   const [copied, copy, setCopied] = useCopy(
@@ -60,40 +60,11 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div
-            className="
-              fixed
-              inset-0
-             bg-gray-600
-              bg-opacity-90
-              transition-opacity
-            "
-            aria-hidden="true"
-          />
+          <div className="modal overlay" aria-hidden="true" />
         </Transition.Child>
 
-
-
-        <div
-          className="
-              fixed
-              inset-0
-              z-10
-              overflow-y-auto
-            "
-        >
-          <div
-            className="
-              flex
-              min-h-full
-              items-end
-              justify-center
-              p-4
-              text-center
-              md:items-center
-              md:p-0
-            "
-          >
+        <div className="modal base">
+          <div className="modal items">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-500"
@@ -103,110 +74,28 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
               leaveFrom="opacity-100 translate-y-0 md:scale-100"
               leaveTo="opacity-0 translate-y-4 md:translate-y-0 md:scale-95"
             >
-              <Dialog.Panel
-                className="
-                  relative
-                  overflow-hidden
-                  rounded-md
-                  transition-all
-                  md:my-8
-                  md:w-full
-                  md:max-w-lg
-                "
-              >
-                <div
-                  className="
-                   bg-slate-100
-                    px-4
-                    pt-5
-                    pb-4
-                    md:p-6
-                    md:pb-4
-                  "
-                >
-                  <div
-                    className="
-                      md:flex
-                      md:items-start
-                    "
-                  >
-                    <div
-                      className="
-                        mt-3
-                        text-center
-                        md:mt-0
-                        md:ml-4
-                        md:flex-grow
-                        md:text-left
-                      "
-                    >
-                      <Dialog.Title
-                        as="h3"
-                        className="
-                          text-3xl
-                          font-bold
-                          leading-6
-                          text-gray-900
-                        "
-                      >
-                        New Secret Created!
-                      </Dialog.Title>
-                      <div
-                        className="
-                          mt-2
-                          md:text-xl
-                        "
-                      >
-                        share your one time secret with this link!
-                      </div>
-                      <input
-                        type="text"
-                        name="new-secret-link"
-                        id="new-secret-link"
-                        className="
-                          mt-2
-                          w-full
-                          overflow-y-auto
-                          rounded-lg
-                          bg-slate-800
-                          p-2
-                          text-sm
-                          text-slate-200
-                        "
-                        value={`${window.location.origin}/open-secret/${secretID}`}
-                        onClick={handleSecretLinkClick}
-                        readOnly
-                      />
-                    </div>
-                  </div>
+              <Dialog.Panel className="modal panel">
+                <div className="modal info-section">
+                  <Dialog.Title as="h3" className="modal title">
+                    New Secret Created!
+                  </Dialog.Title>
+                  <p className="modal text">
+                    share your one time secret with this link!
+                  </p>
+                  <input
+                    type="text"
+                    name="new-secret-link"
+                    id="new-secret-link"
+                    className="modal link-text"
+                    value={`${window.location.origin}/open-secret/${secretID}`}
+                    onClick={handleSecretLinkClick}
+                    readOnly
+                  />
                 </div>
-                <div className="bg-slate-500 px-4 py-3 md:flex md:flex-row-reverse md:px-6">
+                <div className="modal buttons">
                   <button
                     type="button"
-                    className="
-                      flex
-                      w-full
-                      items-center
-                      justify-center
-                      rounded-md
-                      border-4
-                      border-white
-                      bg-slate-500
-                      px-4
-                      py-2
-                      tracking-wide
-                      text-white
-                      shadow-md
-                     hover:bg-blue-100
-                      md:ml-3
-                      md:w-auto
-                      md:text-lg
-                      md:font-bold
-                      md:transition-all
-                      md:duration-300
-                      md:hover:scale-105
-                      md:hover:text-slate-700
-                    "
+                    className="modal button-base copy-button"
                     onClick={copySecretLink}
                   >
                     <p className="grow">Copy to Clipboard!</p>
@@ -219,38 +108,8 @@ export default function NewSecretModal({ isOpen, setIsOpen, secretID }: any) {
                   </button>
                   <button
                     type="button"
-                    className={`
-                      mt-3
-                      flex
-                      w-full
-                      items-center
-                      justify-center
-                      rounded-md
-                      border-4
-                      px-4
-                      py-2
-                      md:mt-0
-                      md:ml-3
-                      md:w-auto
-                      md:text-lg
-                      md:font-bold 
-                     ${
-                       copied
-                         ? `border-gray-700
-                            bg-gray-200
-                            text-gray-700
-                            md:cursor-pointer
-                            md:transition-all
-                            md:duration-300
-                            md:hover:scale-105
-                            md:hover:bg-slate-400
-                            md:hover:text-white`
-                         
-                            : `border-gray-300
-                               bg-gray-400
-                               text-gray-500
-                                md:cursor-not-allowed`
-                     }
+                    className={`modal button-base new-secret
+                     ${copied ? `copied-true` : `copied-false`}
                     `}
                     onClick={closeModal}
                   >

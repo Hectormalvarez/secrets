@@ -13,7 +13,7 @@ const OpenSecretButton = ({
       return (
         <button
           type="submit"
-          className="open-secret button"
+          className="secret button"
           onClick={handleOnClick}
         >
           copy to clipboard!
