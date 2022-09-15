@@ -7,7 +7,6 @@ import { Listbox, Transition } from "@headlessui/react";
 const SecretExpiration = ({expiration, setExpiration, expirationDurations}: any) => {
   return (
     <div className="secrets expire">
-      <p className="">secrets expire after {expiration.name}!</p>
       <Listbox
         as="div"
         className="p-2 hover:cursor-pointer"
@@ -33,7 +32,7 @@ const SecretExpiration = ({expiration, setExpiration, expirationDurations}: any)
                   key={expirationTime.name}
                   value={expirationTime}
                   className={({ active }) =>
-                    `relative cursor-pointer pl-10 pr-4 text-sm md:text-base ${
+                    `relative cursor-pointer pl-10 pr-4 py-4 text-sm md:text-base md:py-2 ${
                       active ? "bg-slate-600 text-slate-200" : "text-slate-900"
                     }`
                   }
@@ -45,6 +44,7 @@ const SecretExpiration = ({expiration, setExpiration, expirationDurations}: any)
           </Listbox.Options>
         </Transition>
       </Listbox>
+      <p className="secrets-expire text">secrets expire after {expiration.name}!</p>
     </div>
   );
 };
