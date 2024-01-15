@@ -15,8 +15,8 @@ describe("NewVaultForm", () => {
     });
 
     // expect required field validation errors to be displayed
-    expect(getByText("Vault name is required")).toBeInTheDocument();
-    expect(getByText("Password is required")).toBeInTheDocument();
+    expect(getByText("Cannot save empty vault!")).toBeInTheDocument();
+    expect(getByText("Password is required!")).toBeInTheDocument();
   });
 
   test("no required error on valid submit", async () => {

@@ -1,11 +1,13 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import NewVault from "@/app/new-vault/page";
+import { render } from "@testing-library/react";
+import NewVaultPage from "@/app/new-vault/page";
 
 describe("new-vault", () => {
-  test("renders the home page", () => {
-    render(<NewVault />);
+  test("renders the NewVaultForm", () => {
+    const { getAllByRole } = render(<NewVaultPage />);
+    const newVaultForm = getAllByRole("button");
 
-    expect(screen.getByText("New Vault")).toBeInTheDocument();
+    expect(newVaultForm[0]).toHaveTextContent("Create Vault");
+    expect(newVaultForm[1]).toHaveTextContent("Open a Vault");
   });
 });

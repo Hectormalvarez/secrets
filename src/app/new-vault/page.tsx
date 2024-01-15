@@ -1,9 +1,6 @@
-import React from 'react'
+import React from "react";
+import NewVaultForm from "@/components/NewVaultForm";
 
-const NewVault = () => {
-  return (
-    <div>New Vault</div>
-  )
+export default function Home() {
+  return <NewVaultForm />;
 }
-
-export default NewVault

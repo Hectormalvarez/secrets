@@ -1,12 +1,13 @@
-import "@testing-library/jest-dom";
+import React from "react";
 import { render } from "@testing-library/react";
 import Home from "@/app/page";
 
 describe("Home", () => {
   test("renders the NewVaultForm", () => {
-    const { getByRole } = render(<Home />);
-    const newVaultForm = getByRole("button");
+    const { getAllByRole } = render(<Home />);
+    const newVaultForm = getAllByRole("button");
 
-    expect(newVaultForm).toHaveTextContent("Create Vault");
+    expect(newVaultForm[0]).toHaveTextContent("Create Vault");
+    expect(newVaultForm[1]).toHaveTextContent("Open a Vault");
   });
 });
