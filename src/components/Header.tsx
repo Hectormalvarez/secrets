@@ -6,14 +6,14 @@ import VaultLogo from "@/logo1.svg";
 const Header = () => {
   return (
     <header className="bg-white p-6 text-gray-800 shadow-md">
-      <div className="flex h-16 items-center">
-        <div className="w-16 rounded-full">
-          <Link href="/">
+      <Link href="/">
+        <div className="flex h-16 items-center">
+          <div className="w-16 rounded-full">
             <Image src={VaultLogo} alt="Vault Logo" className="rounded-lg" />
-          </Link>
+          </div>
+          <p className="px-8 font-serif text-5xl uppercase">Vault</p>
         </div>
-        <p className="px-8 text-5xl font-serif uppercase">Vault</p>
-      </div>
+      </Link>
     </header>
   );
 };

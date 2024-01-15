@@ -9,10 +9,9 @@ describe("Header", () => {
     const header = screen.getByRole("banner");
     expect(header).toBeInTheDocument();
 
-    const image = screen.getByAltText(/Vault Logo/i);
-    expect(image).toBeInTheDocument();
-
-    const brand = screen.getByText("Vault")
+    const logo = screen.getByAltText(/Vault Logo/i);
+    const brand = screen.getByText("Vault");
+    expect(logo).toBeInTheDocument();
     expect(brand).toBeInTheDocument();
   });
 });
